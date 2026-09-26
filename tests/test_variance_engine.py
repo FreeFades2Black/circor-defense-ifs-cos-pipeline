@@ -5,6 +5,10 @@ Tests standard cost variance formulas, scrap containment logic, and First Pass Y
 
 import os
 import sys
+
+# Ensure repository root is on sys.path for direct pytest invocation
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import pytest
 from pyspark.sql import SparkSession
 from lakehouse_pipeline.circor_cos_pyspark_pipeline import calculate_cos_lean_kpis
