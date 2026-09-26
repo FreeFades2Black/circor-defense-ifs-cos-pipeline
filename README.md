@@ -4,7 +4,46 @@
 [![Protocol](https://img.shields.io/badge/Integration-OData%20v4%20REST-green.svg)](https://docs.ifs.com/techdocs)
 [![Engine](https://img.shields.io/badge/Compute-PySpark%20%7C%20Delta%20Lake-orange.svg)](https://spark.apache.org)
 [![Compliance](https://img.shields.io/badge/Quality-AS9100%20%7C%20MIL--DTL--777-red.svg)](https://www.circor.com)
+[![Live Showcase](https://img.shields.io/badge/Live%20Showcase-freefades2black.github.io-success?logo=github&style=flat-square)](https://freefades2black.github.io/circor-defense-ifs-cos-pipeline/)
 [![CI/CD](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
+
+> ### 🌐 Live Architecture & Verification Showcase (.io)
+> **Direct Live Link:** [https://freefades2black.github.io/circor-defense-ifs-cos-pipeline/](https://freefades2black.github.io/circor-defense-ifs-cos-pipeline/)
+> 
+> *The live `.io` showcase deploys automatically via GitHub Actions, combining the **IFS Solution Architect Framework Cheat Sheet** with live execution outputs from the PySpark Gold variance computation and automated UAT test matrix.*
+
+```text
+====================================================================================================
+               CIRCOR OPERATING SYSTEM (COS) • LIVE COMPUTE OUTPUT & UAT MATRIX (.IO)
+               Executed on Omarchy Local Node & GitHub Pages Automated CI/CD
+====================================================================================================
+[GOLD MART] Ingested Conformed Operations: SO-LSL-2026-8041 (Inconel 625), SO-WRN-2026-1102 (Monel K-500)
+[GOLD MART] Computed 2 operational Lean KPIs across Leslie Controls (FL) & Warren Pumps (MA)
+[GOLD MART] 1 orders queued for administrative hold remediation: SO-LSL-2026-8041 (Variance: 34.19%, Scrap: 1.0)
+
++----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+|order_no        |heat_lot_no     |labor_cost_variance |machine_cost_variance|total_cost_variance |variance_percentage|first_pass_yield|trigger_administrative_hold|
++----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+|SO-LSL-2026-8041|HT-INC625-9942  |351.00              |725.00               |1076.00             |34.19              |80.00           |true                      |
+|SO-WRN-2026-1102|HT-MONEL-1048   |-24.00              |-22.00               |-46.00              |-2.74              |100.00          |false                     |
++----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+
+==================================== AUTOMATED UAT TEST MATRIX ====================================
+platform linux -- Python 3.14.7, pytest-9.0.3, pluggy-1.6.0
+rootdir: /home/free/projects/circor-defense-ifs-cos-pipeline
+collected 2 items
+
+tests/test_circor_uat_matrix.py::test_uat_heat_lot_and_scrap_triggers_hold PASSED [ 50%]
+tests/test_circor_uat_matrix.py::test_uat_within_standard_cost_tolerance PASSED [100%]
+
+====================================== 2 passed in 5.81s ======================================
+
+[REMEDIATION] Placed IFS Administrative Hold on Shop Order SO-LSL-2026-8041:
+              Reason: COS Lean Breach: Variance 34.19% | Scrap 1.0 units on Heat Lot HT-INC625-9942
+[AUDIT LOG]   Rowstate transitioned: 'Started' -> 'Parked' | Material Review Board (MRB) notified.
+====================================================================================================
+```
+
 
 A reference integration and operational intelligence bridge connecting **IFS Cloud ERP** to shop floor machining centers, quality inspection benches, and downstream analytics platforms across CIRCOR International manufacturing facilities (Leslie Controls in Tampa, FL; Warren Pumps in Warren, MA).
 
