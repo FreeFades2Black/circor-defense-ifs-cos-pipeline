@@ -263,18 +263,24 @@ full_html = f"""<!DOCTYPE html>
   table.data-table tr:last-child td {{ border-bottom: none; }}
   table.data-table tr:hover td {{ background: #f8fafc; }}
 
-  .status-tag {{
+  .status-tag, .tag {{
     display: inline-block;
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
+    transition: all 0.3s ease;
   }}
-  .status-tag.danger {{ background: var(--status-danger-bg); color: var(--status-danger-text); border: 1px solid var(--status-danger-border); }}
-  .status-tag.success {{ background: var(--status-success-bg); color: var(--status-success-text); border: 1px solid var(--status-success-border); }}
+  .status-tag.danger, .tag-danger {{ background: var(--status-danger-bg); color: var(--status-danger-text); border: 1px solid var(--status-danger-border); }}
+  .status-tag.success, .tag-success {{ background: var(--status-success-bg); color: var(--status-success-text); border: 1px solid var(--status-success-border); }}
 
   .mono {{ font-family: 'JetBrains Mono', monospace; font-size: 0.825rem; }}
+
+  @keyframes fadeIn {{
+    from {{ opacity: 0; transform: translateY(-6px); }}
+    to {{ opacity: 1; transform: translateY(0); }}
+  }}
 
   /* Timeline / Audit Action Card */
   .action-banner {{
@@ -387,8 +393,8 @@ full_html = f"""<!DOCTYPE html>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">Critical Containments</div>
-      <div class="kpi-value" style="color: var(--status-danger-text);">1 Order Parked</div>
-      <div class="kpi-meta">High alloy drift quarantined in IFS</div>
+      <div class="kpi-value" id="kpi-containment-count" style="color: var(--status-success-text);">0 Orders Parked</div>
+      <div class="kpi-meta">Real-time IFS quarantine status</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-title">UAT Pass Reliability</div>
@@ -411,6 +417,22 @@ full_html = f"""<!DOCTYPE html>
 
   <!-- TAB 1: Main Dashboard -->
   <div id="tab-dashboard" class="tab-pane active">
+
+    <!-- Interactive Simulation Control Panel -->
+    <div style="background: #111827; border: 1px solid #374151; border-radius: 10px; padding: 18px 24px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+      <div>
+        <div style="font-weight: 700; font-size: 0.95rem; color: #f9fafb;">Interactive Architecture Simulator</div>
+        <div style="font-size: 0.825rem; color: #9ca3af;">Simulate shop-floor tooling wear on Inconel 625 casting to trigger the closed-loop IFS quarantine daemon.</div>
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button id="btn-simulate" onclick="runSimulation()" style="background: #0284c7; color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: background 0.2s;">
+          Trigger 34% Drift on Freez-SO-8041
+        </button>
+        <button onclick="resetSimulation()" style="background: #374151; color: #e5e7eb; border: none; padding: 10px 14px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;">
+          Reset
+        </button>
+      </div>
+    </div>
     
     <!-- Clean Data Table -->
     <div class="table-card">
@@ -434,10 +456,23 @@ full_html = f"""<!DOCTYPE html>
 """
 
 for row in table_rows:
-    hold_badge = '<span class="status-tag danger">Parked (Hold)</span>' if row["hold"] else '<span class="status-tag success">Released</span>'
-    total_val_color = 'color: var(--status-danger-text); font-weight: 600;' if row["hold"] else 'color: var(--text-main);'
-    
-    full_html += f"""
+    if '8041' in row['order_no']:
+        full_html += f"""
+          <tr>
+            <td class="mono"><strong>{row['order_no']}</strong></td>
+            <td class="mono">{row['heat_lot']}</td>
+            <td>${row['labor_var']}</td>
+            <td>${row['machine_var']}</td>
+            <td id="total-var-cell" style="color: var(--text-main); font-weight: 600;">$32.00</td>
+            <td id="cost-drift-cell"><strong>+2.10%</strong></td>
+            <td>100.00%</td>
+            <td><span id="order-status-badge" class="tag tag-success status-tag success">Released</span></td>
+          </tr>
+        """
+    else:
+        hold_badge = '<span class="tag tag-danger status-tag danger">Parked (Hold)</span>' if row["hold"] else '<span class="tag tag-success status-tag success">Released</span>'
+        total_val_color = 'color: var(--status-danger-text); font-weight: 600;' if row["hold"] else 'color: var(--text-main);'
+        full_html += f"""
           <tr>
             <td class="mono"><strong>{row['order_no']}</strong></td>
             <td class="mono">{row['heat_lot']}</td>
@@ -448,7 +483,7 @@ for row in table_rows:
             <td>{row['fpy']}%</td>
             <td>{hold_badge}</td>
           </tr>
-    """
+        """
 
 full_html += f"""
         </tbody>
@@ -458,18 +493,11 @@ full_html += f"""
     <!-- Closed-Loop Audit Actions -->
     <div class="action-banner">
       <h3>Automated Closed-Loop Remediation Log</h3>
-      <div class="audit-timeline">
-        <div class="timeline-item">
-          <span class="dot dot-red"></span>
-          <div>
-            <strong>IFS Administrative Hold Applied:</strong> Order <code>Freez-SO-2026-8041</code> transitioned from <em>Started</em> to <em>Parked</em> via <code>ShopOrderHandling.svc/ParkOrder</code>.
-            <div class="kpi-meta">Reason: Cost drift reached 34.19% (exceeded 15% tolerance) on Inconel casting. Material Review Board (MRB) notified.</div>
-          </div>
-        </div>
+      <div class="audit-timeline" id="remediation-timeline">
         <div class="timeline-item">
           <span class="dot dot-blue"></span>
           <div>
-            <strong>Operational Clearance:</strong> Order <code>Freez-SO-2026-1102</code> verified within tolerance (-2.74% variance, 100% FPY). Production continues unhindered.
+            <strong>Operational Baseline Active:</strong> Telemetry listeners connected to IFS OData projection endpoints. Orders monitored against Cost Set 1 standard rates.
           </div>
         </div>
       </div>
@@ -537,6 +565,58 @@ full_html += f"""
     document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + tabId).classList.add('active');
     event.currentTarget.classList.add('active');
+  }}
+
+  function runSimulation() {{
+    const badge = document.getElementById("order-status-badge");
+    const costCell = document.getElementById("cost-drift-cell");
+    const totalVarCell = document.getElementById("total-var-cell");
+    const kpiContainment = document.getElementById("kpi-containment-count");
+    const timeline = document.getElementById("remediation-timeline");
+
+    // Update UI dynamically
+    if (badge) {{
+      badge.className = "tag tag-danger status-tag danger";
+      badge.innerText = "Parked (Hold)";
+    }}
+    if (costCell) {{
+      costCell.innerHTML = "<strong>+34.19%</strong>";
+      costCell.style.color = "#ef4444";
+    }}
+    if (totalVarCell) {{
+      totalVarCell.innerHTML = "<strong>$1076.00</strong>";
+      totalVarCell.style.color = "#ef4444";
+    }}
+    if (kpiContainment) {{
+      kpiContainment.innerText = "1 Order Parked";
+      kpiContainment.style.color = "#ef4444";
+    }}
+
+    // Add live event to timeline
+    const now = new Date().toISOString().substring(11, 19);
+    const newEvent = document.createElement("div");
+    newEvent.className = "timeline-item";
+    newEvent.style.animation = "fadeIn 0.4s ease";
+    newEvent.innerHTML = `
+      <span class="dot dot-red"></span>
+      <div>
+        <strong>[${{now}} UTC] IFS Administrative Hold Executed:</strong> Order <code>Freez-SO-2026-8041</code> transitioned to <em>Parked</em> via <code>ShopOrderHandling.svc/ParkOrder</code>.
+        <div style="color: #64748b; margin-top: 2px;">Automated trigger: Variance threshold breached (&gt;15%). Machining spindle halted at Leslie Controls (WC-5AXIS-MILL-02). Material Review Board (MRB) alerted.</div>
+      </div>
+    `;
+    timeline.prepend(newEvent);
+    
+    const btn = document.getElementById("btn-simulate");
+    if (btn) {{
+      btn.disabled = true;
+      btn.innerText = "Hold Executed in IFS";
+      btn.style.background = "#4b5563";
+      btn.style.cursor = "not-allowed";
+    }}
+  }}
+
+  function resetSimulation() {{
+    location.reload();
   }}
 </script>
 
