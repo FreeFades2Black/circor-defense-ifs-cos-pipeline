@@ -225,6 +225,28 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Dark Card Panel for Defense Compliance Matrix */
+  .card-panel {
+    background: #111827;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    color: #f9fafb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  .card-panel table.data-table th {
+    background: #1f2937;
+    color: #9ca3af;
+    border-bottom: 1px solid #374151;
+  }
+  .card-panel table.data-table td {
+    border-bottom: 1px solid #374151;
+    color: #f3f4f6;
+  }
+  .card-panel table.data-table tr:hover td {
+    background: #1e293b;
+  }
+
   /* Timeline / Audit Action Card */
   .action-banner {
     background: #fff;
@@ -353,9 +375,10 @@
 
   <!-- Navigation Tabs -->
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="showTab('dashboard')">Operational Console</button>
-    <button class="tab-btn" onclick="showTab('cheatsheet')">Architectural Framework</button>
-    <button class="tab-btn" onclick="showTab('audit')">UAT Test Matrix</button>
+    <button class="tab-btn active" onclick="switchTab('dashboard')">Operational Console</button>
+    <button class="tab-btn" onclick="switchTab('cheatsheet')">Architectural Framework</button>
+    <button class="tab-btn" onclick="switchTab('audit')">UAT Test Matrix</button>
+    <button class="tab-btn" onclick="switchTab('compliance')">Defense Governance & Risk Matrix</button>
   </div>
 
   <!-- TAB 1: Main Dashboard -->
@@ -564,8 +587,69 @@ tests/test_circor_uat_matrix.py::test_uat_within_standard_cost_tolerance PASSED 
     </div>
   </div>
 
+  <!-- TAB 4: Defense Governance & Risk Matrix -->
+  <div id="tab-compliance" class="tab-pane">
+    <div class="card-panel" style="padding: 24px;">
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 1.15rem; font-weight: 700; color: #f9fafb;">Defense Compliance Enforcement & Financial Loss Matrix</h2>
+        <p style="font-size: 0.85rem; color: #9ca3af; margin-top: 4px;">
+          Quantified operational risk assessment modeling real-time IFS Cloud guardrails versus uncontained quality escapes under NAVSEA, ASME, and AS9100 standards.
+        </p>
+      </div>
+
+      <table class="data-table" style="font-size: 0.8rem;">
+        <thead>
+          <tr>
+            <th>Standard & Mandate</th>
+            <th>IFS Cloud Architectural Control</th>
+            <th>Failure Mode If Unchecked</th>
+            <th>Risk Severity</th>
+            <th>Estimated Loss per Event</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AS9100 Rev D</strong><br><span style="color: #9ca3af;">Lot Traceability & Quarantine</span></td>
+            <td>Marble UI blocks operation without Heat Lot. Automated daemon executes <code>ParkOrder</code> upon scrap detection.</td>
+            <td>WIP propagation: flawed castings machined across multiple shifts; contaminated stock mixes with certified valves.</td>
+            <td><span class="tag tag-danger">Critical</span></td>
+            <td><strong style="color: #ef4444;">$185K - $420K</strong><br><span style="color: #9ca3af;">Sunk alloy + 5-axis machine time + DCMA CAR audit</span></td>
+          </tr>
+          <tr>
+            <td><strong>MIL-DTL-777</strong><br><span style="color: #9ca3af;">Hydrostatic Pressure Testing</span></td>
+            <td>Quality projection verifies proof pressure (3,750+ PSI) and zero leakage. Order parked automatically if leak rate &gt; 0.</td>
+            <td>Valve with hairline porosity escapes testing and fails during shipyard submarine hull integration.</td>
+            <td><span class="tag tag-danger">Catastrophic</span></td>
+            <td><strong style="color: #ef4444;">$750K - $2.4M</strong><br><span style="color: #9ca3af;">Drydock delay fees ($25K/day) + emergency valve extraction</span></td>
+          </tr>
+          <tr>
+            <td><strong>ASME Section III</strong><br><span style="color: #9ca3af;">Nuclear Fluid Systems</span></td>
+            <td>Silver-layer CMTR chemistry verification before order release. Zero-tolerance hold triggered on any scrap.</td>
+            <td>Wrong alloy grade installed in primary cooling system; galvanic corrosion or embrittlement risk.</td>
+            <td><span class="tag tag-danger">Catastrophic</span></td>
+            <td><strong style="color: #ef4444;">$1.2M - $5.0M+</strong><br><span style="color: #9ca3af;">Nuclear NRC intervention + complete fleet recall + N-Stamp risk</span></td>
+          </tr>
+          <tr>
+            <td><strong>NAVSEA 250-1500-1</strong><br><span style="color: #9ca3af;">Welding & NDT Inspections</span></td>
+            <td>Predecessor routing locks prevent Op 30 machining until Op 20 NDT inspection receives certified badge sign-off.</td>
+            <td>Machinist cuts over sub-surface weld crack, concealing structural defect beneath cosmetic finish.</td>
+            <td><span class="tag tag-danger">Critical</span></td>
+            <td><strong style="color: #ef4444;">$340K - $920K</strong><br><span style="color: #9ca3af;">Field radiographic testing + weld gouging and re-cladding</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 20px; background: rgba(17, 24, 39, 0.8); border: 1px solid #374151; border-radius: 8px; padding: 16px;">
+        <div style="font-weight: 600; font-size: 0.85rem; color: #f9fafb; margin-bottom: 4px;">Loss Quantification Equation</div>
+        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.785rem; color: #06b6d4;">
+          Cost of Quality Failure (COPQ) = Material Loss (Inconel @ $65/lb) + Machining Hours ($145/hr) + Containment/MRB + Contractual Penalties
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
-    CIRCOR Operating System (COS) Operational Intelligence Bridge &bull; Built on Arch Linux (Omarchy Node) &bull; Generated UTC: 2026-09-26 17:16:22
+    CIRCOR Operating System (COS) Operational Intelligence Bridge &bull; Built on Arch Linux (Omarchy Node) &bull; Generated UTC: 2026-09-26 17:36:31
   </footer>
 
 </div>
@@ -577,6 +661,7 @@ tests/test_circor_uat_matrix.py::test_uat_within_standard_cost_tolerance PASSED 
     document.getElementById('tab-' + tabId).classList.add('active');
     event.currentTarget.classList.add('active');
   }
+  const switchTab = showTab;
 
   function runSimulation() {
     const badge = document.getElementById("order-status-badge");

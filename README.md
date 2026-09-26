@@ -142,6 +142,7 @@ This repository models IFS Cloud as the transactional system of record and finan
 │   └── MULTI_SITE_RISK_REGISTER.md        # Multi-site executive risk & mitigation matrix
 ├── docs/
 │   ├── CIRCOR_ETO_CTO_LIFECYCLE.md        # ETO/CTO valve lifecycle deep dive
+│   ├── DEFENSE_COMPLIANCE_RISK_MATRIX.md  # Standards mapping, failure modes & loss quantification
 │   └── IFS_ODATA_SPECIFICATION.md         # Endpoint schemas and entity mappings
 ├── tests/
 │   ├── test_circor_integration.py         # End-to-end integration test suite
@@ -232,6 +233,8 @@ This solution conforms to United States defense and nuclear flow-control standar
 * **MIL-DTL-777:** Valves, piping system, components, and hydrostatic testing compliance.
 * **ASME Boiler & Pressure Vessel Code (Section III):** Nuclear submarine power plant components.
 * **NAVSEA 250-1500-1:** Welding and non-destructive testing requirements for submarine hull penetrations.
+
+> **Detailed Compliance & Financial Loss Analysis:** See the full [Defense Compliance, Risk Assessment & Financial Loss Matrix](docs/DEFENSE_COMPLIANCE_RISK_MATRIX.md) mapping each standard to IFS Cloud runtime controls, failure modes, and quantified COPQ loss estimates ($185K to $5.0M+).
 
 ---
 
