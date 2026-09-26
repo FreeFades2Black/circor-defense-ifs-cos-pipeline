@@ -42,8 +42,8 @@ def execute_circor_order_holds(flagged_orders: list, endpoint: str = IFS_ENDPOIN
 if __name__ == "__main__":
     sample_flagged_work = [
         {
-            "order_no": "SO-LSL-2026-8041",
-            "heat_lot_no": "HT-INC625-9942",
+            "order_no": "Freez-SO-2026-8041",
+            "heat_lot_no": "Freez-HEAT-INC625-9942",
             "variance_percentage": 34.1,
             "first_pass_yield": 80.0
         }

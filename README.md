@@ -17,16 +17,16 @@
                CIRCOR OPERATING SYSTEM (COS) • LIVE COMPUTE OUTPUT & UAT MATRIX (.IO)
                Executed on Omarchy Local Node & GitHub Pages Automated CI/CD
 ====================================================================================================
-[GOLD MART] Ingested Conformed Operations: SO-LSL-2026-8041 (Inconel 625), SO-WRN-2026-1102 (Monel K-500)
-[GOLD MART] Computed 2 operational Lean KPIs across Leslie Controls (FL) & Warren Pumps (MA)
-[GOLD MART] 1 orders queued for administrative hold remediation: SO-LSL-2026-8041 (Variance: 34.19%, Scrap: 1.0)
+[GOLD MART] Ingested Conformed Operations: Freez-SO-2026-8041 (Inconel 625), Freez-SO-2026-1102 (Monel K-500)
+[GOLD MART] Computed 2 operational Lean KPIs across Freez-SITE-LESLIE-01 & Freez-SITE-WARREN-01
+[GOLD MART] 1 orders queued for administrative hold remediation: Freez-SO-2026-8041 (Variance: 34.19%, Scrap: 1.0)
 
-+----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
-|order_no        |heat_lot_no     |labor_cost_variance |machine_cost_variance|total_cost_variance |variance_percentage|first_pass_yield|trigger_administrative_hold|
-+----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
-|SO-LSL-2026-8041|HT-INC625-9942  |351.00              |725.00               |1076.00             |34.19              |80.00           |true                      |
-|SO-WRN-2026-1102|HT-MONEL-1048   |-24.00              |-22.00               |-46.00              |-2.74              |100.00          |false                     |
-+----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
++-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+|order_no           |heat_lot_no           |labor_cost_variance |machine_cost_variance|total_cost_variance |variance_percentage|first_pass_yield|trigger_administrative_hold|
++-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+|Freez-SO-2026-8041 |Freez-HEAT-INC625-9942|351.00              |725.00               |1076.00             |34.19              |80.00           |true                      |
+|Freez-SO-2026-1102 |Freez-HEAT-MNL-1048   |-24.00              |-22.00               |-46.00              |-2.74              |100.00          |false                     |
++-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
 
 ==================================== AUTOMATED UAT TEST MATRIX ====================================
 platform linux -- Python 3.14.7, pytest-9.0.3, pluggy-1.6.0
@@ -38,14 +38,33 @@ tests/test_circor_uat_matrix.py::test_uat_within_standard_cost_tolerance PASSED 
 
 ====================================== 2 passed in 5.81s ======================================
 
-[REMEDIATION] Placed IFS Administrative Hold on Shop Order SO-LSL-2026-8041:
-              Reason: COS Lean Breach: Variance 34.19% | Scrap 1.0 units on Heat Lot HT-INC625-9942
+[REMEDIATION] 2026-09-26 12:05:14 [WARNING] [Frees-HoldQuarantineDaemon] Evaluating flagged candidate Freez-SO-2026-8041...
+              2026-09-26 12:05:15 [INFO] Successfully parked IFS Order Freez-SO-2026-8041.
+              Reason: Freez-COS Breach: Variance 34.19% | Scrap 1.0 on Heat Lot Freez-HEAT-INC625-9942.
 [AUDIT LOG]   Rowstate transitioned: 'Started' -> 'Parked' | Material Review Board (MRB) notified.
 ====================================================================================================
 ```
 
-
 A reference integration and operational intelligence bridge connecting **IFS Cloud ERP** to shop floor machining centers, quality inspection benches, and downstream analytics platforms across CIRCOR International manufacturing facilities (Leslie Controls in Tampa, FL; Warren Pumps in Warren, MA).
+
+---
+
+## Architectural Lineage & Synthetic Artifact Disclosure
+
+To distinguish real-world enterprise standards from the custom reference architecture engineered for this showcase, all synthetic datasets, simulated shop floor records, and custom pipeline wrappers carry the **`Freez-`** / **`Frees-`** designation:
+
+* **Production CIRCOR / IFS Reality:** Real-world standards, real IFS Cloud OData v4 projection contracts (`ShopOrderHandling.svc`, `ShopFloorWorkbenchHandling.svc`), authentic defense standards (AS9100 Rev D, MIL-DTL-777, NAVSEA 250-1500-1), and authentic cost accounting equations.
+* **`Freez-` Manufactured Implementations:** Simulated mock API microservices, synthetic manufacturing test data, custom PySpark variance algorithms, and simulated cutover runbooks.
+
+| Domain | Standard Industry Component | Manufactured Reference Component (`Freez-` Labeled) |
+| :--- | :--- | :--- |
+| **Site Contracts** | CIRCOR Plant IDs (`US10-WARREN`, `US20-LESLIE`) | `Freez-SITE-LESLIE-01`, `Freez-SITE-WARREN-01` |
+| **Part Master** | 6-Inch Cryogenic Inconel Globe Valve | `Freez-PART-VLV-CRYO-6IN` |
+| **Shop Orders** | Plant Shop Orders | `Freez-SO-2026-8041`, `Freez-SO-2026-1102` |
+| **Heat Batches** | Mill Heat Lot Genealogy | `Freez-HEAT-INC625-9942`, `Freez-HEAT-MNL-1048` |
+| **Work Centers** | 5-Axis CNC Milling Cells | `Freez-WC-5AXIS-MILL-02`, `Freez-WC-HYDRO-01` |
+| **Pipeline Core** | Databricks Lakehouse Job | `Frees-COS-LeanVarianceEngine` |
+| **Daemon Agent** | Reverse-ETL Quarantine Agent | `Frees-IFS-HoldQuarantineDaemon` |
 
 ---
 
@@ -219,20 +238,19 @@ python lakehouse_pipeline/04_ifs_remediation_daemon.py
 
 ### PySpark Gold-Layer Variance Table
 ```text
-+----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
-|order_no        |heat_lot_no     |labor_cost_variance |machine_cost_variance|total_cost_variance |variance_percentage|first_pass_yield|trigger_administrative_hold|
-+----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
-|SO-LSL-2026-8041|HT-INC625-9942  |351.00              |725.00               |1076.00             |34.19              |80.00           |true                      |
-|SO-WRN-2026-1102|HT-MONEL-1048   |-24.00              |-22.00               |-46.00              |-2.74              |100.00          |false                     |
-+----------------+----------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
++-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+|order_no           |heat_lot_no           |labor_cost_variance |machine_cost_variance|total_cost_variance |variance_percentage|first_pass_yield|trigger_administrative_hold|
++-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+|Freez-SO-2026-8041 |Freez-HEAT-INC625-9942|351.00              |725.00               |1076.00             |34.19              |80.00           |true                      |
+|Freez-SO-2026-1102 |Freez-HEAT-MNL-1048   |-24.00              |-22.00               |-46.00              |-2.74              |100.00          |false                     |
++-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
 ```
 
 ### Remediation Daemon Execution Log
 ```text
-[REMEDIATION DAEMON] Evaluating Gold Hold Queue (1 candidates)...
-[SUCCESS] Placed IFS Administrative Hold on Shop Order SO-LSL-2026-8041:
-          Reason: COS Lean Breach: Variance 34.19% | Scrap 1.0 units on Heat Lot HT-INC625-9942
-[AUDIT LOG] State transitioned: 'Started' -> 'Parked' | Material Review Board (MRB) notification dispatched.
+2026-09-26 12:05:14 [WARNING] [Frees-HoldQuarantineDaemon] Evaluating flagged candidate Freez-SO-2026-8041...
+2026-09-26 12:05:15 [INFO] Successfully parked IFS Order Freez-SO-2026-8041. 
+          Reason: Freez-COS Breach: Variance 34.19% | Scrap 1.0 on Heat Lot Freez-HEAT-INC625-9942.
 ```
 
 ---

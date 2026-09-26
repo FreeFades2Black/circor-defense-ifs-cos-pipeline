@@ -69,14 +69,15 @@ def main():
     table.add_column("State", style="green")
 
     for o in orders:
-        table.add_row(o["order_no"], "US20-LESLIE" if "LSL" in o["order_no"] else "US10-WARREN", o["work_center_no"], o["heat_lot_no"], o["rowstate"])
+        contract_label = "Freez-SITE-LESLIE-01" if "8041" in o["order_no"] else "Freez-SITE-WARREN-01"
+        table.add_row(o["order_no"], contract_label, o["work_center_no"], o["heat_lot_no"], o["rowstate"])
     console.print(table)
 
     # 3. Submit Submarine Proof Hydro Test
     console.print("\n[3/5] [bold green]Submitting Hydrostatic Proof Test (6,000 PSI)...[/bold green]")
     hydro_report = {
         "test_id": "HYDRO-SUB-PROOF-901",
-        "order_no": "SO-WRN-2026-1102",
+        "order_no": "Freez-SO-2026-1102",
         "operation_no": 10,
         "tested_by_badge": "QA-TECH-WARREN-42",
         "test_pressure_psi": 6000.0,
@@ -108,9 +109,10 @@ def main():
     results = execute_circor_order_holds(flagged_orders, endpoint=endpoint)
 
     # Final Verification
-    final_order = requests.get(f"{endpoint}/ShopOrderHandling.svc/ShopOrderSet('SO-LSL-2026-8041')").json()
-    console.print(f"\n[bold yellow]Final IFS Cloud State for SO-LSL-2026-8041:[/bold yellow] [bold red]{final_order['rowstate']}[/bold red]")
+    final_order = requests.get(f"{endpoint}/ShopOrderHandling.svc/ShopOrderSet('Freez-SO-2026-8041')").json()
+    console.print(f"\n[bold yellow]Final IFS Cloud State for Freez-SO-2026-8041:[/bold yellow] [bold red]{final_order['rowstate']}[/bold red]")
     assert final_order["rowstate"] == "Parked", "Order failed to transition to Parked state!"
+
 
     server.stop()
     console.print(Panel.fit(

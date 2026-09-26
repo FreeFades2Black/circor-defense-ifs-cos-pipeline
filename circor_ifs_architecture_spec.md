@@ -9,7 +9,23 @@ Key operating requirements:
 * **Traceability:** Full backward and forward genealogy covering raw mill Heat Lot numbers, Certified Material Test Reports (CMTR), Nondestructive Testing (NDT), and hydrostatic pressure test logs.
 * **Execution Framework:** CIRCOR Operating System (COS) focusing on Lean flow, First Pass Yield (FPY), scrap elimination, and variance containment.
 
-## 2. Multi-Site IFS Cloud Entity Structure
+## 2. Architectural Lineage & Synthetic Artifact Disclosure
+To distinguish real-world enterprise standards from the custom reference architecture engineered for this showcase, all synthetic datasets, simulated shop floor records, and custom pipeline wrappers carry the **`Freez-`** / **`Frees-`** designation:
+
+* **Production CIRCOR / IFS Reality:** Real-world standards, real IFS Cloud OData v4 projection contracts (`ShopOrderHandling.svc`, `ShopFloorWorkbenchHandling.svc`), authentic defense standards (AS9100 Rev D, MIL-DTL-777, NAVSEA 250-1500-1), and authentic cost accounting equations.
+* **`Freez-` Manufactured Implementations:** Simulated mock API microservices, synthetic manufacturing test data, custom PySpark variance algorithms, and simulated cutover runbooks.
+
+| Domain | Standard Industry Component | Manufactured Reference Component (`Freez-` Labeled) |
+| :--- | :--- | :--- |
+| **Site Contracts** | CIRCOR Plant IDs (`US10-WARREN`, `US20-LESLIE`) | `Freez-SITE-LESLIE-01`, `Freez-SITE-WARREN-01` |
+| **Part Master** | 6-Inch Cryogenic Inconel Globe Valve | `Freez-PART-VLV-CRYO-6IN` |
+| **Shop Orders** | Plant Shop Orders | `Freez-SO-2026-8041`, `Freez-SO-2026-1102` |
+| **Heat Batches** | Mill Heat Lot Genealogy | `Freez-HEAT-INC625-9942`, `Freez-HEAT-MNL-1048` |
+| **Work Centers** | 5-Axis CNC Milling Cells | `Freez-WC-5AXIS-MILL-02`, `Freez-WC-HYDRO-01` |
+| **Pipeline Core** | Databricks Lakehouse Job | `Frees-COS-LeanVarianceEngine` |
+| **Daemon Agent** | Reverse-ETL Quarantine Agent | `Frees-IFS-HoldQuarantineDaemon` |
+
+## 3. Multi-Site IFS Cloud Entity Structure
 * **Corporate Ledger / Parent Contract:** `US01-HQ` (Burlington, MA)
 * **Site 1:** `US10-WARREN` (Warren Pumps, MA - Naval defense pumps and heavy alloy machining)
 * **Site 2:** `US20-LESLIE` (Leslie Controls, FL - Severe-service and cryogenic control valves)

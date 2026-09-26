@@ -46,33 +46,34 @@ def ingest_ifs_projections(
             if entity == "parts":
                 data = [
                     {
-                        "part_no": "VLV-CRYO-001",
-                        "description": "2-inch Cryogenic Inconel Globe Valve",
-                        "contract": "US20-LESLIE",
+                        "part_no": "Freez-PART-VLV-CRYO-6IN",
+                        "description": "Frees Reference: 6-Inch Cryogenic Globe Valve (Inconel 625)",
+                        "contract": "Freez-SITE-LESLIE-01",
                         "cost_set": 1,
                         "material_alloy": "Inconel 625",
-                        "std_material_cost": 4200.0,
-                        "std_labor_cost": 1500.0,
-                        "std_machine_cost": 2800.0,
-                        "std_overhead_cost": 950.0,
-                        "quality_spec": "MIL-SPEC-777",
+                        "std_material_cost": 6800.0,
+                        "std_labor_cost": 1450.0,
+                        "std_machine_cost": 2200.0,
+                        "std_overhead_cost": 750.0,
+                        "quality_spec": "ASME-SEC-III-SUBMARINE",
                         "requires_cmtr": True
                     }
                 ]
             elif entity == "shop_orders":
                 data = [
                     {
-                        "order_no": "SO-LSL-2026-8041",
+                        "order_no": "Freez-SO-2026-8041",
                         "operation_no": 20,
-                        "operation_description": "5-Axis Contour CNC Profiling",
-                        "work_center_no": "WC-5AXIS-MILL-02",
-                        "labor_class_no": "AERO-MACHINIST-L3",
-                        "heat_lot_no": "HT-INC625-9942",
+                        "operation_description": "Frees Reference: 5-Axis Flange Boring & Contouring",
+                        "work_center_no": "Freez-WC-5AXIS-MILL-02",
+                        "labor_class_no": "MACHINIST-SPEC-4",
+                        "heat_lot_no": "Freez-HEAT-INC625-9942",
                         "planned_labor_hours": 18.0,
                         "planned_machine_hours": 15.0,
                         "actual_labor_hours": 24.5,
                         "actual_machine_hours": 20.0,
                         "standard_labor_rate": 54.0,
+
                         "standard_machine_rate": 145.0,
                         "revised_qty_due": 5.0,
                         "qty_complete": 4.0,

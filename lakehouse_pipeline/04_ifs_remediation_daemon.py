@@ -33,9 +33,11 @@ class CircorRemediationDaemon:
         for item in candidates:
             order_no = item.get("order_no")
             reason = (
-                f"COS Lean Breach: Variance {item.get('variance_percentage')}% | "
-                f"Scrap {item.get('qty_scrapped')} units on Heat Lot {item.get('heat_lot_no')}"
+                f"Freez-COS Breach: Variance {item.get('variance_percentage')}% | "
+                f"Scrap {item.get('qty_scrapped')} on Heat Lot {item.get('heat_lot_no')}"
             )
+            timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+            print(f"{timestamp} [WARNING] [Frees-HoldQuarantineDaemon] Evaluating flagged candidate {order_no}...")
             action_result = self.issue_park_order(order_no, reason)
             actions_taken.append(action_result)
 
@@ -67,7 +69,9 @@ class CircorRemediationDaemon:
             variance_pct = ((actual_cost - planned_cost) / planned_cost * 100) if planned_cost > 0 else 0
 
             if (qty_scrapped > 0 or variance_pct > 15.0) and op.get("rowstate") != "Parked":
-                reason = f"Automated COS Hold: Variance {variance_pct:.1f}%, Scrap: {qty_scrapped} on Heat Lot {op.get('heat_lot_no')}"
+                reason = f"Freez-COS Breach: Variance {variance_pct:.2f}% | Scrap {qty_scrapped} on Heat Lot {op.get('heat_lot_no')}"
+                timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+                print(f"{timestamp} [WARNING] [Frees-HoldQuarantineDaemon] Evaluating flagged candidate {order_no}...")
                 result = self.issue_park_order(order_no, reason)
                 actions_taken.append(result)
 
@@ -80,8 +84,9 @@ class CircorRemediationDaemon:
 
         try:
             res = requests.post(target_url, json=payload, timeout=5)
+            timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
             if res.status_code == 200:
-                print(f"[SUCCESS] Placed IFS Administrative Hold on Shop Order {order_no}: {reason}")
+                print(f"{timestamp} [INFO] Successfully parked IFS Order {order_no}.\n          Reason: {reason}")
                 return {"order_no": order_no, "status": "Parked", "response": res.json()}
             else:
                 print(f"[ERROR] Failed to park order {order_no}: HTTP {res.status_code} - {res.text}")
@@ -89,6 +94,7 @@ class CircorRemediationDaemon:
         except Exception as e:
             print(f"[EXCEPTION] Park request failed for order {order_no}: {e}")
             return {"order_no": order_no, "status": "Exception", "error": str(e)}
+
 
 if __name__ == "__main__":
     endpoint = os.environ.get("IFS_ENDPOINT", "http://localhost:8000/ifs")

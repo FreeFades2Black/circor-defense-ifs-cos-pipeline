@@ -36,10 +36,10 @@ def run_gold_variance_engine(
     else:
         records = [
             {
-                "order_no": "SO-LSL-2026-8041",
+                "order_no": "Freez-SO-2026-8041",
                 "operation_no": 20,
-                "work_center_no": "WC-5AXIS-MILL-02",
-                "heat_lot_no": "HT-INC625-9942",
+                "work_center_no": "Freez-WC-5AXIS-MILL-02",
+                "heat_lot_no": "Freez-HEAT-INC625-9942",
                 "planned_labor_hours": 18.0,
                 "actual_labor_hours": 24.5,
                 "standard_labor_rate": 54.0,
@@ -49,16 +49,32 @@ def run_gold_variance_engine(
                 "revised_qty_due": 5.0,
                 "qty_scrapped": 1.0,
                 "rowstate": "Started"
+            },
+            {
+                "order_no": "Freez-SO-2026-1102",
+                "operation_no": 10,
+                "work_center_no": "Freez-WC-LATHE-01",
+                "heat_lot_no": "Freez-HEAT-MNL-1048",
+                "planned_labor_hours": 12.0,
+                "actual_labor_hours": 11.5,
+                "standard_labor_rate": 48.0,
+                "planned_machine_hours": 10.0,
+                "actual_machine_hours": 9.8,
+                "standard_machine_rate": 110.0,
+                "revised_qty_due": 3.0,
+                "qty_scrapped": 0.0,
+                "rowstate": "Started"
             }
         ]
 
     spark = SparkSession.builder \
-        .appName("CIRCOR-COS-GoldVarianceEngine") \
+        .appName("Frees-COS-LeanVarianceEngine") \
         .master("local[1]") \
         .config("spark.driver.host", "127.0.0.1") \
         .config("spark.driver.bindAddress", "127.0.0.1") \
         .config("spark.ui.enabled", "false") \
         .getOrCreate()
+
 
     schema = [
         "order_no", "operation_no", "work_center_no", "heat_lot_no",
@@ -95,7 +111,16 @@ def run_gold_variance_engine(
 
     print(f"[GOLD MART] Computed {len(gold_results)} operational KPIs.")
     print(f"[GOLD MART] {len(hold_candidates)} orders queued for administrative hold remediation.")
+
+    print("\nPySpark Variance Table:")
+    gold_kpis_df.select(
+        "order_no", "heat_lot_no", "labor_cost_variance",
+        "machine_cost_variance", "total_cost_variance",
+        "variance_percentage", "first_pass_yield", "trigger_administrative_hold"
+    ).show(truncate=False)
+
     return gold_results
+
 
 if __name__ == "__main__":
     run_gold_variance_engine()

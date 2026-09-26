@@ -61,7 +61,7 @@ def run_pipeline(fetch_from_api: bool = False, api_endpoint: str = "http://local
     os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
 
     spark = SparkSession.builder \
-        .appName("CIRCOR-COS-LeanVarianceEngine") \
+        .appName("Frees-COS-LeanVarianceEngine") \
         .master("local[1]") \
         .config("spark.driver.host", "127.0.0.1") \
         .config("spark.driver.bindAddress", "127.0.0.1") \
@@ -88,11 +88,12 @@ def run_pipeline(fetch_from_api: bool = False, api_endpoint: str = "http://local
             print(f"[WARN] Failed to fetch live from IFS API ({e}). Falling back to static batch.")
 
     if not raw_circor_records:
-        # Default raw order records ingested from IFS Cloud ShopOrderSet
+        # Default raw order records ingested from IFS Cloud ShopOrderSet with Freez- labeling
         raw_circor_records = [
-            ("SO-LSL-2026-8041", 20, "WC-5AXIS-MILL-02", "HT-INC625-9942", 18.0, 24.5, 54.00, 15.0, 20.0, 145.00, 5.0, 1.0, "Started"),
-            ("SO-WRN-2026-1102", 10, "WC-LATHE-HEAVY-01", "HT-MONEL-1048", 12.0, 11.5, 48.00, 10.0, 9.8, 110.00, 3.0, 0.0, "Started")
+            ("Freez-SO-2026-8041", 20, "Freez-WC-5AXIS-MILL-02", "Freez-HEAT-INC625-9942", 18.0, 24.5, 54.00, 15.0, 20.0, 145.00, 5.0, 1.0, "Started"),
+            ("Freez-SO-2026-1102", 10, "Freez-WC-LATHE-01", "Freez-HEAT-MNL-1048", 12.0, 11.5, 48.00, 10.0, 9.8, 110.00, 3.0, 0.0, "Started")
         ]
+
 
     schema = [
         "order_no", "operation_no", "work_center_no", "heat_lot_no",

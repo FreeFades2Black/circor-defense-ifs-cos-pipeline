@@ -86,12 +86,12 @@ def process_bronze_to_silver(
             "ingestion_timestamp_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "records": [
                 {
-                    "order_no": "SO-LSL-2026-8041",
+                    "order_no": "Freez-SO-2026-8041",
                     "operation_no": 20,
-                    "operation_description": "5-Axis Contour CNC Profiling",
-                    "work_center_no": "WC-5AXIS-MILL-02",
-                    "labor_class_no": "AERO-MACHINIST-L3",
-                    "heat_lot_no": "HT-INC625-9942",
+                    "operation_description": "Frees Reference: 5-Axis Flange Boring & Contouring",
+                    "work_center_no": "Freez-WC-5AXIS-MILL-02",
+                    "labor_class_no": "MACHINIST-SPEC-4",
+                    "heat_lot_no": "Freez-HEAT-INC625-9942",
                     "planned_labor_hours": 18.0,
                     "planned_machine_hours": 15.0,
                     "actual_labor_hours": 24.5,
@@ -104,12 +104,12 @@ def process_bronze_to_silver(
                     "rowstate": "Started"
                 },
                 {
-                    "order_no": "SO-WRN-2026-1102",
+                    "order_no": "Freez-SO-2026-1102",
                     "operation_no": 10,
-                    "operation_description": "Submarine Pump Impeller Turning",
-                    "work_center_no": "WC-LATHE-HEAVY-01",
-                    "labor_class_no": "DEFENSE-MACHINIST-L2",
-                    "heat_lot_no": "HT-MONEL-1048",
+                    "operation_description": "Frees Reference: Heavy Monel Shaft Rough & Finish Turning",
+                    "work_center_no": "Freez-WC-LATHE-01",
+                    "labor_class_no": "MACHINIST-SPEC-3",
+                    "heat_lot_no": "Freez-HEAT-MNL-1048",
                     "planned_labor_hours": 12.0,
                     "planned_machine_hours": 10.0,
                     "actual_labor_hours": 11.5,
@@ -122,6 +122,7 @@ def process_bronze_to_silver(
                     "rowstate": "Started"
                 }
             ]
+
         }
         timestamp = sample_batch["ingestion_timestamp_utc"]
         records = sample_batch["records"]

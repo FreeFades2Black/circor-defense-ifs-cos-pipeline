@@ -45,8 +45,8 @@ def test_get_part_catalog():
     parts = res.json()
     assert len(parts) >= 2
     part_numbers = [p["part_no"] for p in parts]
-    assert "VLV-CRYO-GLOBE-06" in part_numbers
-    assert "PMP-NAV-ROTARY-12" in part_numbers
+    assert "Freez-PART-VLV-CRYO-6IN" in part_numbers
+    assert "Freez-PART-PUMP-SUB-12IN" in part_numbers
 
 def test_get_shop_orders():
     client = TestClient(app)
@@ -54,15 +54,15 @@ def test_get_shop_orders():
     assert res.status_code == 200
     orders = res.json()
     assert len(orders) >= 2
-    so = client.get("/ifs/ShopOrderHandling.svc/ShopOrderSet('SO-LSL-2026-8041')")
+    so = client.get("/ifs/ShopOrderHandling.svc/ShopOrderSet('Freez-SO-2026-8041')")
     assert so.status_code == 200
-    assert so.json()["heat_lot_no"] == "HT-INC625-9942"
+    assert so.json()["heat_lot_no"] == "Freez-HEAT-INC625-9942"
 
 def test_hydrostatic_testing_pass():
     client = TestClient(app)
     report = {
         "test_id": "HT-2026-001",
-        "order_no": "SO-WRN-2026-1102",
+        "order_no": "Freez-SO-2026-1102",
         "operation_no": 10,
         "tested_by_badge": "QA-INSP-88",
         "test_pressure_psi": 6000.0,
@@ -75,13 +75,13 @@ def test_hydrostatic_testing_pass():
     res = client.post("/ifs/QualityAssuranceHandling.svc/SubmitHydroTest", json=report)
     assert res.status_code == 201
     assert res.json()["status"] == "SUCCESS"
-    assert SHOP_ORDERS_DB["SO-WRN-2026-1102"].rowstate == "Started"
+    assert SHOP_ORDERS_DB["Freez-SO-2026-1102"].rowstate == "Started"
 
 def test_hydrostatic_testing_fail_triggers_hold():
     client = TestClient(app)
     report = {
         "test_id": "HT-2026-002",
-        "order_no": "SO-WRN-2026-1102",
+        "order_no": "Freez-SO-2026-1102",
         "operation_no": 10,
         "tested_by_badge": "QA-INSP-88",
         "test_pressure_psi": 5850.0,
@@ -95,7 +95,8 @@ def test_hydrostatic_testing_fail_triggers_hold():
     assert res.status_code == 201
     assert res.json()["status"] == "HOLD_TRIGGERED"
     # Order must automatically transition to Parked
-    assert SHOP_ORDERS_DB["SO-WRN-2026-1102"].rowstate == "Parked"
+    assert SHOP_ORDERS_DB["Freez-SO-2026-1102"].rowstate == "Parked"
+
 
 def test_pyspark_cos_variance_engine(spark_session):
     raw_records = [

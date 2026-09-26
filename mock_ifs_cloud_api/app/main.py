@@ -62,11 +62,11 @@ class HydrostaticTestReport(BaseModel):
 
 
 def seed_circor_data():
-    """Seed initial CIRCOR master and operational data."""
-    PARTS_DB["VLV-CRYO-GLOBE-06"] = CircorPartMaster(
-        part_no="VLV-CRYO-GLOBE-06",
-        description="6-Inch Cryogenic Severe Service Globe Valve (Inconel 625)",
-        contract="US20-LESLIE",
+    """Seed initial CIRCOR master and operational data with Freez- manufactured labels."""
+    PARTS_DB["Freez-PART-VLV-CRYO-6IN"] = CircorPartMaster(
+        part_no="Freez-PART-VLV-CRYO-6IN",
+        description="Frees Reference: 6-Inch Cryogenic Globe Valve (Inconel 625)",
+        contract="Freez-SITE-LESLIE-01",
         material_alloy="Inconel 625",
         std_material_cost=6800.00,
         std_labor_cost=1450.00,
@@ -76,10 +76,10 @@ def seed_circor_data():
         requires_cmtr=True
     )
 
-    PARTS_DB["PMP-NAV-ROTARY-12"] = CircorPartMaster(
-        part_no="PMP-NAV-ROTARY-12",
-        description="12-Inch Naval Submarine Rotary Positive Displacement Pump (Monel K-500)",
-        contract="US10-WARREN",
+    PARTS_DB["Freez-PART-PUMP-SUB-12IN"] = CircorPartMaster(
+        part_no="Freez-PART-PUMP-SUB-12IN",
+        description="Frees Reference: 12-Inch Naval Submarine Rotary Pump (Monel K-500)",
+        contract="Freez-SITE-WARREN-01",
         material_alloy="Monel K-500",
         std_material_cost=12500.00,
         std_labor_cost=3100.00,
@@ -89,13 +89,13 @@ def seed_circor_data():
         requires_cmtr=True
     )
 
-    SHOP_ORDERS_DB["SO-LSL-2026-8041"] = CircorShopOrderOperation(
-        order_no="SO-LSL-2026-8041",
+    SHOP_ORDERS_DB["Freez-SO-2026-8041"] = CircorShopOrderOperation(
+        order_no="Freez-SO-2026-8041",
         operation_no=20,
-        operation_description="5-Axis Flange Boring & Profile Contouring",
-        work_center_no="WC-5AXIS-MILL-02",
+        operation_description="Frees Reference: 5-Axis Flange Boring & Contouring",
+        work_center_no="Freez-WC-5AXIS-MILL-02",
         labor_class_no="MACHINIST-SPEC-4",
-        heat_lot_no="HT-INC625-9942",
+        heat_lot_no="Freez-HEAT-INC625-9942",
         planned_labor_hours=18.0,
         planned_machine_hours=15.0,
         actual_labor_hours=24.5,
@@ -108,13 +108,13 @@ def seed_circor_data():
         rowstate="Started"
     )
 
-    SHOP_ORDERS_DB["SO-WRN-2026-1102"] = CircorShopOrderOperation(
-        order_no="SO-WRN-2026-1102",
+    SHOP_ORDERS_DB["Freez-SO-2026-1102"] = CircorShopOrderOperation(
+        order_no="Freez-SO-2026-1102",
         operation_no=10,
-        operation_description="Heavy Monel Shaft Rough & Finish Turning",
-        work_center_no="WC-LATHE-HEAVY-01",
+        operation_description="Frees Reference: Heavy Monel Shaft Rough & Finish Turning",
+        work_center_no="Freez-WC-LATHE-01",
         labor_class_no="MACHINIST-SPEC-3",
-        heat_lot_no="HT-MONEL-1048",
+        heat_lot_no="Freez-HEAT-MNL-1048",
         planned_labor_hours=12.0,
         planned_machine_hours=10.0,
         actual_labor_hours=11.5,
@@ -126,6 +126,7 @@ def seed_circor_data():
         qty_scrapped=0.0,
         rowstate="Started"
     )
+
 
 
 @asynccontextmanager
