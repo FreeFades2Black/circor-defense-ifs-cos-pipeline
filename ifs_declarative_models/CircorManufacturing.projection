@@ -1,0 +1,37 @@
+projection CircorManufacturing;
+component SHPORD;
+layer Cust;
+description "OData projection for CIRCOR shop floor execution and automated holds";
+
+------------------------------ ENTITY SETS ------------------------------
+entityset ShopOrderOperationSet for ShopOrderOperation;
+entityset PartCostingSet for PartCostingRecord;
+
+-------------------------------- ENTITIES -------------------------------
+@Override
+entity ShopOrderOperation {
+   crud = Read, Update;
+   
+   attribute OrderNo Text {
+      fetch = "order_no";
+      label = "Order Number";
+      maxlength = 20;
+      required = [true];
+      editable = [false];
+   }
+   attribute OperationNo Integer {
+      fetch = "operation_no";
+      required = [true];
+   }
+   attribute HeatLotNo Text {
+      fetch = "heat_lot_no";
+      label = "Mill Heat Batch";
+      required = [true];
+   }
+   attribute Rowstate Enumeration(ShopOrderState);
+   
+   action ParkShopOrder {
+      parameter OrderNo Text;
+      parameter Reason Text;
+   }
+}

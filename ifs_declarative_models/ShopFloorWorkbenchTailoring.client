@@ -1,0 +1,83 @@
+client ShopFloorWorkbenchTailoring;
+component SHPORD;
+layer Cust;
+
+--------------------------------- PAGES ---------------------------------
+page LeanShopFloorWorkbench using ShopOrderOperationSet {
+   label = "CIRCOR Shop Floor Workbench - Lean Cell";
+   
+   selector ShopOrderOpSelector;
+   
+   group OrderHeaderBriefGroup;
+   group MachiningExecutionGroup;
+   
+   commandgroup OperationalActions {
+      command RecordClockingCommand;
+      command ReportScrapWithRootCauseCommand;
+      command QualityHoldCommand;
+   }
+}
+
+--------------------------------- GROUPS --------------------------------
+group OrderHeaderBriefGroup for ShopOrderOperation {
+   label = "Operational Context";
+   
+   field OrderNo {
+      editable = [false];
+      size = Small;
+   }
+   field OperationNo {
+      editable = [false];
+      size = Small;
+   }
+   field PartNo {
+      label = "Valve Assembly";
+      editable = [false];
+   }
+   field RevisedQtyDue {
+      label = "Target Qty";
+      size = Small;
+   }
+   badge Rowstate {
+      label = "Status";
+      style = TextOnly;
+      emphasis Progress1 = [Rowstate = "Planned"];
+      emphasis Progress6 = [Rowstate = "Released"];
+      emphasis Progress12 = [Rowstate = "Started"];
+      emphasis StateBlocked = [Rowstate = "Parked"];
+   }
+}
+
+group MachiningExecutionGroup for ShopOrderOperation {
+   label = "Defense Traceability & Run Parameters";
+   
+   field HeatLotNo {
+      label = "Raw Mill Heat Lot";
+      required = [true];
+      editable = [Rowstate = "Released"];
+   }
+   field RequiresCmtr {
+      label = "CMTR Verified";
+      required = [true];
+   }
+   field ActualLaborHours {
+      label = "Clocked Labor (Hrs)";
+      size = Small;
+   }
+   field ActualMachineHours {
+      label = "Spindle Run (Hrs)";
+      size = Small;
+   }
+}
+
+-------------------------------- COMMANDS -------------------------------
+command QualityHoldCommand for ShopOrderOperation {
+   label = "Initiate Quality Hold";
+   style = Warning;
+   enabled = [Rowstate = "Started"];
+   
+   execute {
+      call ParkShopOrder(OrderNo, "Machinist triggered administrative hold due to casting porosity or tool failure.");
+      success("Shop Order ${OrderNo} placed on hold. Quality Engineering notified.");
+   }
+}

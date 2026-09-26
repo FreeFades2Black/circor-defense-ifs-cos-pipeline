@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   circor-ifs-api:
-    build: .
+    build: ./mock_ifs_cloud_api
     container_name: circor-ifs-api
     ports:
       - "8000:8000"
-    command: ["uvicorn", "circor_mock_ifs_api:app", "--host", "0.0.0.0", "--port", "8000"]
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
     restart: unless-stopped
 
   circor-hold-daemon:
@@ -14,7 +14,7 @@ services:
     container_name: circor-hold-daemon
     depends_on:
       - circor-ifs-api
-    command: ["python", "circor_automated_hold_daemon.py"]
+    command: ["python", "lakehouse_pipeline/04_ifs_remediation_daemon.py"]
     environment:
       - IFS_ENDPOINT=http://circor-ifs-api:8000/ifs
     restart: on-failure

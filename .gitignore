@@ -15,3 +15,5 @@ metastore_db/
 derby.log
 spark-warehouse/
 .DS_Store
+data/
+*.log

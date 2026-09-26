@@ -63,7 +63,6 @@ class HydrostaticTestReport(BaseModel):
 
 def seed_circor_data():
     """Seed initial CIRCOR master and operational data."""
-    # Severe-service cryogenic globe valve manufactured at Leslie Controls
     PARTS_DB["VLV-CRYO-GLOBE-06"] = CircorPartMaster(
         part_no="VLV-CRYO-GLOBE-06",
         description="6-Inch Cryogenic Severe Service Globe Valve (Inconel 625)",
@@ -77,7 +76,6 @@ def seed_circor_data():
         requires_cmtr=True
     )
 
-    # High-pressure submarine rotary pump manufactured at Warren Pumps
     PARTS_DB["PMP-NAV-ROTARY-12"] = CircorPartMaster(
         part_no="PMP-NAV-ROTARY-12",
         description="12-Inch Naval Submarine Rotary Positive Displacement Pump (Monel K-500)",
@@ -91,7 +89,6 @@ def seed_circor_data():
         requires_cmtr=True
     )
 
-    # Work Order for 5 units undergoing precision CNC milling at Leslie Controls
     SHOP_ORDERS_DB["SO-LSL-2026-8041"] = CircorShopOrderOperation(
         order_no="SO-LSL-2026-8041",
         operation_no=20,
@@ -101,7 +98,7 @@ def seed_circor_data():
         heat_lot_no="HT-INC625-9942",
         planned_labor_hours=18.0,
         planned_machine_hours=15.0,
-        actual_labor_hours=24.5,  # Exceeded standard
+        actual_labor_hours=24.5,
         actual_machine_hours=20.0,
         standard_labor_rate=54.00,
         standard_machine_rate=145.00,
@@ -111,7 +108,6 @@ def seed_circor_data():
         rowstate="Started"
     )
 
-    # Work Order for 3 units undergoing heavy lathe turning at Warren Pumps
     SHOP_ORDERS_DB["SO-WRN-2026-1102"] = CircorShopOrderOperation(
         order_no="SO-WRN-2026-1102",
         operation_no=10,
@@ -144,7 +140,6 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Seed initial data for direct module import support
 seed_circor_data()
 
 # --- Standard IFS OData v4 Projection Endpoints ---
@@ -170,7 +165,6 @@ def record_hydro_test(report: HydrostaticTestReport):
     
     QUALITY_LOGS_DB.append(report)
     
-    # If hydrostatic testing fails defense threshold, automatically put order on Quality Hold
     if report.result == "Fail" or report.leak_rate_scfh > 0.0:
         SHOP_ORDERS_DB[report.order_no].rowstate = "Parked"
         return {
