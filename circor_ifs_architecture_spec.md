@@ -88,6 +88,9 @@ flowchart TD
 ```
 
 ## 4. Quality & Defense Compliance Protocols
-1. **Heat Lot Traceability:** Every machined casting and forged billet must trace to an authentic Certified Material Test Report (CMTR) with mechanical and chemical certification.
-2. **Hydrostatic Testing:** Submarine ball valves and cryogenic globe valves must undergo hold times at 1.5x design pressure (e.g. 6,000 PSI) with zero allowable leak rate (`leak_rate_scfh = 0.0`).
-3. **Variance Threshold Containment:** If actual labor or machine hours exceed standard cost allowance by >15%, the shop order is automatically transitioned to `Parked` status in IFS Cloud until approved by Quality and Finance.
+1. **Heat Lot Traceability:** Every machined casting and forged billet must trace to an authentic Certified Material Test Report (CMTR) with mechanical and chemical certification (AS9100 Rev D Clauses 8.5.2 & 8.7).
+2. **Hydrostatic Testing:** Submarine ball valves and cryogenic globe valves must undergo hold times at 1.5x design pressure (e.g., 3,750 to 6,000 PSI) with zero allowable leak rate (`leak_rate_scfh = 0.0`) under MIL-DTL-777.
+3. **Variance Threshold Containment:** If actual labor or machine hours exceed standard cost allowance by >15% or scrap is logged, the shop order is automatically transitioned to `Parked` status in IFS Cloud until approved by Quality and Finance.
+4. **Predecessor NDT Locks:** Op 30 Finish Milling is strictly gated behind Op 20 certified NDT Level II/III inspector sign-offs per NAVSEA 250-1500-1.
+
+> **Full Compliance, Risk & Loss Specification:** Refer to [docs/DEFENSE_COMPLIANCE_RISK_MATRIX.md](docs/DEFENSE_COMPLIANCE_RISK_MATRIX.md) for the complete floor execution guardrails, physical detection hardware breakdown, and COPQ financial models ($185K to $5.0M+).
