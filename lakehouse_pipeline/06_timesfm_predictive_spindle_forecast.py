@@ -4,9 +4,15 @@ Performs zero-shot time-series forecasting on 5-axis CNC spindle cutting telemet
 to anticipate Inconel 625 tool failure and trigger predictive IFS EAM work orders.
 """
 
-import numpy as np
+import random
 import json
 from dataclasses import dataclass, asdict
+
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
 
 @dataclass
 class TimesFMPredictionResult:
@@ -24,19 +30,30 @@ class TimesFMPredictionResult:
 
 def run_timesfm_spindle_inference():
     # 64 hours of historical spindle load % on 5-axis CNC cell Freez-WC-5AXIS-MILL-02
-    np.random.seed(42)
-    base_load = 52.0
-    drift_trend = np.linspace(0, 22.0, 64)
-    noise = np.random.normal(0, 1.8, 64)
-    historical_spindle_telemetry = (base_load + drift_trend + noise).tolist()
+    if HAS_NUMPY:
+        np.random.seed(42)
+        base_load = 52.0
+        drift_trend = np.linspace(0, 22.0, 64)
+        noise = np.random.normal(0, 1.8, 64)
+        historical_spindle_telemetry = (base_load + drift_trend + noise).tolist()
+    else:
+        random.seed(42)
+        base_load = 52.0
+        drift_trend = [22.0 * i / 63.0 for i in range(64)]
+        noise = [random.gauss(0, 1.8) for _ in range(64)]
+        historical_spindle_telemetry = [base_load + drift_trend[i] + noise[i] for i in range(64)]
     
     current_load = round(historical_spindle_telemetry[-1], 2)
     
     # TimesFM Zero-Shot Horizon: Forecast next 12 hours
     # Simulated foundation model inference behavior
     horizon_hours = 12
-    projected_delta = np.linspace(current_load, current_load + 14.5, horizon_hours)
-    forecast_confidence_upper = (projected_delta + 2.1).tolist()
+    if HAS_NUMPY:
+        projected_delta = np.linspace(current_load, current_load + 14.5, horizon_hours)
+        forecast_confidence_upper = (projected_delta + 2.1).tolist()
+    else:
+        projected_delta = [current_load + (14.5 * i / (horizon_hours - 1)) for i in range(horizon_hours)]
+        forecast_confidence_upper = [d + 2.1 for d in projected_delta]
     
     max_forecast_load = round(float(forecast_confidence_upper[-1]), 2)
     threshold = 85.0  # Spindle load threshold where carbide tooling fails on Inconel
