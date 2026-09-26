@@ -634,6 +634,55 @@ full_html += f"""
           Cost of Quality Failure (COPQ) = Material Loss (Inconel @ $65/lb) + Machining Hours ($145/hr) + Containment/MRB + Contractual Penalties
         </div>
       </div>
+
+      <div style="margin-top: 28px; margin-bottom: 16px;">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #f9fafb;">Shop Floor Execution & Containment Guardrails</h3>
+        <p style="font-size: 0.825rem; color: #9ca3af; margin-top: 2px;">
+          Hardware detection devices, IFS Cloud transactional gating points, and automated containment actions enforced at the machine cell level.
+        </p>
+      </div>
+
+      <table class="data-table" style="font-size: 0.8rem;">
+        <thead>
+          <tr>
+            <th>Defense Standard</th>
+            <th>Key Parameter Checked</th>
+            <th>Floor Detection Hardware</th>
+            <th>IFS Enforcement Point</th>
+            <th>What Happens If Breached</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>AS9100 Rev D</strong></td>
+            <td>Heat Lot vs. Part Master matching</td>
+            <td>2D DataMatrix scanner</td>
+            <td><code>ShopFloorWorkbenchTailoring.client</code></td>
+            <td>Spindle start disabled; order parked if scrap reported</td>
+          </tr>
+          <tr>
+            <td><strong>MIL-DTL-777</strong></td>
+            <td>Proof pressure hold (3,750 PSI / 10 min; 0.0 SCFH leak)</td>
+            <td>PLC digital pressure transducer + leak detector</td>
+            <td><code>QualityAssuranceHandling.svc</code></td>
+            <td>Auto-quarantine in ERP; blocks outbound shipping traveler</td>
+          </tr>
+          <tr>
+            <td><strong>ASME Sec III</strong></td>
+            <td>CMTR chemistry &amp; zero scrap tolerance</td>
+            <td>Raw material laboratory CMTR records</td>
+            <td><code>02_silver_conformed.py</code></td>
+            <td>Order release blocked; scrap &gt; 0 triggers administrative hold</td>
+          </tr>
+          <tr>
+            <td><strong>NAVSEA 250-1500-1</strong></td>
+            <td>Qualified NDT sign-off (PT/UT/VT)</td>
+            <td>Inspector badge scan + calibrated NDT gear</td>
+            <td>Routing Predecessor Locks</td>
+            <td>Next operation locked until certified inspector signs off</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

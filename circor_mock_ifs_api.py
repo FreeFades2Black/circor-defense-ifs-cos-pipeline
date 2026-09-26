@@ -171,7 +171,12 @@ def record_hydro_test(report: HydrostaticTestReport):
     QUALITY_LOGS_DB.append(report)
     
     # If hydrostatic testing fails defense threshold, automatically put order on Quality Hold
-    if report.result == "Fail" or report.leak_rate_scfh > 0.0:
+    if (
+        report.result == "Fail"
+        or report.leak_rate_scfh > 0.0
+        or report.test_pressure_psi < report.target_pressure_psi
+        or report.hold_duration_minutes < 10.0
+    ):
         SHOP_ORDERS_DB[report.order_no].rowstate = "Parked"
         return {
             "status": "HOLD_TRIGGERED",
