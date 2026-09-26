@@ -53,6 +53,8 @@ To distinguish real-world enterprise standards from the custom reference archite
 | **3. Site Deployments & Cutover** | `cutover/PLANT_CUTOVER_72HR_RUNBOOK.md` | Minute-by-minute 72-hour weekend plant cutover runbook and automated PySpark UAT verification suite. |
 | **4. Cross-Functional Governance**| `governance/MULTI_SITE_RISK_REGISTER.md` | Multi-site executive risk register governing ERP rollouts across Leslie Controls (FL), Warren Pumps (MA), and Weinheim (Germany). |
 | **5. Continuous Improvement (COS)**| `lakehouse_pipeline/03_gold_circor_variance_engine.py` | CIRCOR Operating System (COS) variance engine calculating labor/machine cost drift and First Pass Yield (FPY). |
+| **6. Actuarial Risk & Underwriting**| `lakehouse_pipeline/05_insurance_risk_actuarial_model.py` | Actuarial engine modeling Expected Annual Loss, 22% CGL HPO credits, and $2.75M working capital unlocked from sensor gates. |
+| **7. Predictive AI (Google TimesFM)**| `lakehouse_pipeline/06_timesfm_predictive_spindle_forecast.py` | Pre-trained foundation model executing zero-shot time-series forecasting to predict tool wear and dispatch IFS EAM work orders. |
 
 ---
 
@@ -204,6 +206,12 @@ python lakehouse_pipeline/03_gold_circor_variance_engine.py
 
 # 6. Poll Gold remediation queue and quarantine out-of-spec shop orders
 python lakehouse_pipeline/04_ifs_remediation_daemon.py
+
+# 7. Evaluate Actuarial Insurance Underwriting & Commercial Loss Exposure
+python lakehouse_pipeline/05_insurance_risk_actuarial_model.py
+
+# 8. Execute Google TimesFM Zero-Shot Spindle Load & Chatter Forecasting
+python lakehouse_pipeline/06_timesfm_predictive_spindle_forecast.py
 ```
 
 *Interactive Swagger UI documentation is available at `http://localhost:8800/docs`.*
@@ -258,6 +266,37 @@ This solution conforms to United States defense and nuclear flow-control standar
 |Freez-SO-2026-8041 |Freez-HEAT-INC625-9942|351.00              |725.00               |1076.00             |34.19              |80.00           |true                      |
 |Freez-SO-2026-1102 |Freez-HEAT-MNL-1048   |-24.00              |-22.00               |-46.00              |-2.74              |100.00          |false                     |
 +-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+
+====================================================================================================
+      CIRCOR ACTUARIAL RISK & COMMERCIAL INSURANCE UNDERWRITING MODEL (OMARCHY COMPUTE)
+====================================================================================================
+Annual Plant Production Benchmark: 12,000 Valves ($102,000,000 Gross Output)
+Expected Annual Loss (Manual Traveler)     : $83,160,000.00
+Expected Annual Loss (Sensor Gated)        : $2,970,000.00
+Direct Loss Exposure Avoided               : $80,190,000.00
+----------------------------------------------------------------------------------------------------
+Commercial Liability Premium (Manual)      : $1,887,000.00/yr
+Commercial Liability Premium (Sensor HPO)  : $1,471,860.00/yr
+Annual Insurance Premium Credit (22% HPO)  : $415,140.00/yr
+----------------------------------------------------------------------------------------------------
+Sequestered Warranty Reserve (Manual 4.5%) : $4,590,000.00
+Sequestered Warranty Reserve (Sensor 1.8%) : $1,836,000.00
+Working Capital Unlocked to Balance Sheet  : $2,754,000.00
+====================================================================================================
+
+====================================================================================================
+        CIRCOR PREDICTIVE SPINDLE WEAR FORECAST • GOOGLE TIMESFM ZERO-SHOT ENGINE
+====================================================================================================
+Target Work Order      : Freez-SO-2026-8041 (Inconel 625)
+Work Center Location   : Freez-WC-5AXIS-MILL-02
+Context Window         : 64 Hours Historical Ingestion
+Forecast Horizon       : +12 Hours Forward Window
+Current Spindle Load   : 71.85%
+TimesFM Projected Peak : 88.45% (Threshold: 85.0%)
+Predictive Breach Flag : True
+Prevented Scrap Value  : $24,500.00
+Remediation Action     : PREEMPTIVE TOOL CHATTER / WEAR DETECTED: Dispatched preventive tool change to IFS Cloud EAM (WorkOrderHandling.svc). Spindle feed override locked at 80%.
+====================================================================================================
 
 ==================================== AUTOMATED UAT TEST MATRIX ====================================
 tests/test_circor_uat_matrix.py::test_uat_heat_lot_and_scrap_triggers_hold PASSED [ 50%]

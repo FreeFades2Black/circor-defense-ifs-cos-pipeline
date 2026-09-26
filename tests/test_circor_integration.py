@@ -122,3 +122,33 @@ def test_pyspark_cos_variance_engine(spark_session):
     assert rows["SO-TEST-2"]["labor_cost_variance"] == -50.0
     assert rows["SO-TEST-2"]["first_pass_yield"] == 100.0
     assert rows["SO-TEST-2"]["trigger_administrative_hold"] is False
+
+
+def test_actuarial_insurance_underwriting_model():
+    import importlib
+    m5 = importlib.import_module("lakehouse_pipeline.05_insurance_risk_actuarial_model")
+    res = m5.evaluate_circor_underwriting_models()
+
+    assert "manual_profile" in res
+    assert "sensor_profile" in res
+    assert "financial_advantages" in res
+
+    # Verify HPO premium savings and working capital unlocked
+    assert res["financial_advantages"]["annual_insurance_premium_savings"] == 415140.00
+    assert res["financial_advantages"]["working_capital_freed_from_reserves"] == 2754000.00
+    assert res["sensor_profile"]["underwriting_tier"] == "Highly Protected Operations (HPO) / Tier-1 Defense Elite"
+
+
+def test_timesfm_predictive_spindle_forecast():
+    import importlib
+    m6 = importlib.import_module("lakehouse_pipeline.06_timesfm_predictive_spindle_forecast")
+    res = m6.run_timesfm_spindle_inference()
+
+    assert res["order_no"] == "Freez-SO-2026-8041"
+    assert res["work_center"] == "Freez-WC-5AXIS-MILL-02"
+    assert res["context_window_hours"] == 64
+    assert res["forecast_horizon_hours"] == 12
+    assert res["predictive_breach_detected"] is True
+    assert res["estimated_prevented_scrap_cost"] == 24500.00
+    assert "WorkOrderHandling.svc" in res["recommended_maintenance_action"]
+

@@ -1,25 +1,72 @@
-====================================================================================================
-               CIRCOR OPERATING SYSTEM (COS) • LIVE COMPUTE OUTPUT & UAT MATRIX (.IO)
-               Executed on Omarchy Local Node & GitHub Pages Automated CI/CD
-====================================================================================================
-[GOLD MART] Ingested Conformed Operations: Freez-SO-2026-8041 (Inconel 625), Freez-SO-2026-1102 (Monel K-500)
-[GOLD MART] Computed 2 operational Lean KPIs across Freez-SITE-LESLIE-01 & Freez-SITE-WARREN-01
-[GOLD MART] 1 orders queued for administrative hold remediation: Freez-SO-2026-8041 (Variance: 34.19%, Scrap: 1.0)
+[GOLD MART] Computed 1 operational KPIs.
+[GOLD MART] 1 orders queued for administrative hold remediation.
 
-+-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
-|order_no           |heat_lot_no           |labor_cost_variance |machine_cost_variance|total_cost_variance |variance_percentage|first_pass_yield|trigger_administrative_hold|
-+-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
-|Freez-SO-2026-8041 |Freez-HEAT-INC625-9942|351.00              |725.00               |1076.00             |34.19              |80.00           |true                      |
-|Freez-SO-2026-1102 |Freez-HEAT-MNL-1048   |-24.00              |-22.00               |-46.00              |-2.74              |100.00          |false                     |
-+-------------------+----------------------+--------------------+---------------------+--------------------+-------------------+----------------+--------------------------+
+PySpark Variance Table:
++----------------+--------------+-------------------+---------------------+-------------------+-------------------+----------------+---------------------------+
+|order_no        |heat_lot_no   |labor_cost_variance|machine_cost_variance|total_cost_variance|variance_percentage|first_pass_yield|trigger_administrative_hold|
++----------------+--------------+-------------------+---------------------+-------------------+-------------------+----------------+---------------------------+
+|SO-LSL-2026-8041|HT-INC625-9942|351.0              |725.0                |1076.0             |34.19              |80.0            |true                       |
++----------------+--------------+-------------------+---------------------+-------------------+-------------------+----------------+---------------------------+
 
-==================================== AUTOMATED UAT TEST MATRIX ====================================
+SUCCESS: The process with PID 19264 (child process of PID 20392) has been terminated.
+SUCCESS: The process with PID 20392 (child process of PID 26928) has been terminated.
+SUCCESS: The process with PID 26928 (child process of PID 32640) has been terminated.
+
+26/09/26 13:12:03 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://wiki.apache.org/hadoop/WindowsProblems
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/09/26 13:12:04 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+
+[Stage 0:>                                                          (0 + 1) / 1]
+
+                                                                                
+
+[Stage 1:>                                                          (0 + 1) / 1]
+
+                                                                                
+
+====================================================================================================
+      CIRCOR ACTUARIAL RISK & COMMERCIAL INSURANCE UNDERWRITING MODEL (OMARCHY COMPUTE)
+====================================================================================================
+Annual Plant Production Benchmark: 12,000 Valves ($102,000,000 Gross Output)
+Expected Annual Loss (Manual Traveler)     : $83,160,000.00
+Expected Annual Loss (Sensor Gated)        : $2,970,000.00
+Direct Loss Exposure Avoided               : $80,190,000.00
+----------------------------------------------------------------------------------------------------
+Commercial Liability Premium (Manual)      : $1,887,000.00/yr
+Commercial Liability Premium (Sensor HPO)  : $1,471,860.00/yr
+Annual Insurance Premium Credit (22% HPO)  : $415,140.00/yr
+----------------------------------------------------------------------------------------------------
+Sequestered Warranty Reserve (Manual 4.5%) : $4,590,000.00
+Sequestered Warranty Reserve (Sensor 1.8%) : $1,836,000.00
+Working Capital Unlocked to Balance Sheet  : $2,754,000.00
+====================================================================================================
+
+====================================================================================================
+        CIRCOR PREDICTIVE SPINDLE WEAR FORECAST • GOOGLE TIMESFM ZERO-SHOT ENGINE
+====================================================================================================
+Target Work Order      : Freez-SO-2026-8041 (Inconel 625)
+Work Center Location   : Freez-WC-5AXIS-MILL-02
+Context Window         : 64 Hours Historical Ingestion
+Forecast Horizon       : +12 Hours Forward Window
+Current Spindle Load   : 71.85%
+TimesFM Projected Peak : 88.45% (Threshold: 85.0%)
+Predictive Breach Flag : True
+Prevented Scrap Value  : $24,500.00
+Remediation Action     : PREEMPTIVE TOOL CHATTER / WEAR DETECTED: Dispatched preventive tool change to IFS Cloud EAM (WorkOrderHandling.svc). Spindle feed override locked at 80%.
+====================================================================================================
+
+============================= test session starts =============================
+platform win32 -- Python 3.11.0, pytest-9.1.1, pluggy-1.6.0 -- C:\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\FreeF\projects\circor-defense-ifs-cos-pipeline
+plugins: anyio-4.14.2
+collecting ... collected 2 items
+
 tests/test_circor_uat_matrix.py::test_uat_heat_lot_and_scrap_triggers_hold PASSED [ 50%]
 tests/test_circor_uat_matrix.py::test_uat_within_standard_cost_tolerance PASSED [100%]
-====================================== 2 passed in 5.81s ======================================
 
-[REMEDIATION] 2026-09-26 12:05:14 [WARNING] [Frees-HoldQuarantineDaemon] Evaluating flagged candidate Freez-SO-2026-8041...
-              2026-09-26 12:05:15 [INFO] Successfully parked IFS Order Freez-SO-2026-8041. 
-              Reason: Freez-COS Breach: Variance 34.19% | Scrap 1.0 on Heat Lot Freez-HEAT-INC625-9942.
-[AUDIT LOG]   Rowstate transitioned: 'Started' -> 'Parked' | Material Review Board (MRB) notified.
-====================================================================================================
+============================= 2 passed in 15.50s ==============================
+SUCCESS: The process with PID 22440 (child process of PID 21392) has been terminated.
+SUCCESS: The process with PID 21392 (child process of PID 17972) has been terminated.
+SUCCESS: The process with PID 17972 (child process of PID 23624) has been terminated.
