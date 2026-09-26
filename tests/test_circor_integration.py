@@ -9,7 +9,11 @@ import pytest
 from fastapi.testclient import TestClient
 from pyspark.sql import SparkSession
 
+# Ensure repository root is on sys.path for direct pytest invocation
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from circor_mock_ifs_api import app, PARTS_DB, SHOP_ORDERS_DB, QUALITY_LOGS_DB, seed_circor_data
+
 from circor_cos_pyspark_pipeline import calculate_cos_lean_kpis
 from circor_automated_hold_daemon import execute_circor_order_holds
 
