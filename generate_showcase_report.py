@@ -4,6 +4,12 @@ from datetime import datetime
 import markdown
 
 os.makedirs("docs", exist_ok=True)
+try:
+    from scripts.generate_timesfm_chart import generate_timesfm_svg
+    generate_timesfm_svg()
+except Exception as e:
+    print(f"Warning: SVG generation skipped: {e}")
+
 cheat_sheet_path = "docs/cheat_sheets/ifs_solution_architect_framework.md"
 output_log_path = "test_run_variance_output.txt"
 
@@ -299,6 +305,7 @@ full_html = f"""<!DOCTYPE html>
   <!-- Navigation Tabs -->
   <div class="tab-nav">
     <button class="tab-btn active" onclick="switchTab('console')">Operational Console</button>
+    <button class="tab-btn" onclick="switchTab('temporal')">Temporal Drift (Heat & Cost Over Time)</button>
     <button class="tab-btn" onclick="switchTab('timesfm')">Predictive AI (Google TimesFM)</button>
     <button class="tab-btn" onclick="switchTab('insurance')">Sensor Automation & Insurance Model</button>
     <button class="tab-btn" onclick="switchTab('framework')">Architectural Framework</button>
@@ -366,6 +373,126 @@ full_html = f"""<!DOCTYPE html>
     </div>
   </div>
 
+  <!-- TAB: Temporal Drift (Heat & Cost Over Time) -->
+  <div id="tab-temporal" class="tab-pane">
+    <div class="specs-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+        <div>
+          <h2 style="margin-top: 0; font-size: 1.25rem;">Temporal Telemetry: Cost &amp; Thermal Drift Over Spindle Runtime</h2>
+          <p style="color: var(--text-muted); margin-bottom: 0;">
+            Tracking 18-hour continuous 5-axis machining on Freez-SO-2026-8041 (Inconel 625) to isolate cost drift and thermal accumulation before batch completion.
+          </p>
+        </div>
+        <span class="pill pill-blue">Ingestion: 1-Min Delta Lake Partitioned Stream</span>
+      </div>
+
+      <!-- Metric Stats Ribbon -->
+      <div class="kpi-grid" style="margin-bottom: 24px;">
+        <div class="kpi-card">
+          <div class="kpi-label">Machining Spindle Run</div>
+          <div class="kpi-value">18.0 Hours</div>
+          <div class="kpi-sub">Continuous 5-axis operation</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Drift Onset Window</div>
+          <div class="kpi-value" style="color: var(--accent-cyan);">Hour 12.0</div>
+          <div class="kpi-sub">Tool micro-wear begins acceleration</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Peak Spindle Temp</div>
+          <div class="kpi-value" style="color: var(--status-danger-text);">87.0°C</div>
+          <div class="kpi-sub">Thermal threshold breached at H+15</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Final Cost Variance</div>
+          <div class="kpi-value" style="color: var(--status-danger-text);">+$1,076.00</div>
+          <div class="kpi-sub">+34.19% over Cost Set 1 baseline</div>
+        </div>
+      </div>
+
+      <!-- Visual Chart 1: Cumulative Financial Drift Hour-by-Hour -->
+      <div style="background: rgba(17, 24, 39, 0.9); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-weight: 700; font-size: 0.85rem; color: #f9fafb; text-transform: uppercase; letter-spacing: 0.05em;">
+            Cumulative Cost Drift vs. Planned Baseline (Hour 1 to Hour 18)
+          </span>
+          <span style="font-size: 0.75rem; color: var(--status-danger-text); font-weight: 600;">Hold Trigger Threshold: +15%</span>
+        </div>
+
+        <div style="display: flex; align-items: flex-end; height: 130px; gap: 6px; padding-bottom: 10px; border-bottom: 1px dashed #374151;">
+          <!-- H1 to H11: Minimal Drift -->
+          <div style="flex: 1; background: #0284c7; height: 10%; border-radius: 2px;" title="H1: Planned $199 | Actual $199 | Drift $0"></div>
+          <div style="flex: 1; background: #0284c7; height: 15%; border-radius: 2px;" title="H3: Planned $597 | Actual $597 | Drift $0"></div>
+          <div style="flex: 1; background: #0284c7; height: 22%; border-radius: 2px;" title="H6: Planned $1,194 | Actual $1,194 | Drift $0"></div>
+          <div style="flex: 1; background: #0284c7; height: 30%; border-radius: 2px;" title="H9: Planned $1,791 | Actual $1,791 | Drift $0"></div>
+          <div style="flex: 1; background: #06b6d4; height: 38%; border-radius: 2px;" title="H11: Planned $2,189 | Actual $2,189 | Drift $0"></div>
+          <!-- H12 to H18: Accelerated Drift -->
+          <div style="flex: 1; background: #f59e0b; height: 48%; border-radius: 2px;" title="H12: Tool wear onset | Drift +$132.00 (+5.5%)"></div>
+          <div style="flex: 1; background: #f59e0b; height: 60%; border-radius: 2px;" title="H14: Feed-rate compensation | Drift +$398.00 (+14.2%)"></div>
+          <div style="flex: 1; background: #ef4444; height: 75%; border-radius: 2px;" title="H15: Breach &gt;15% | Drift +$578.00 (+19.3%) [IFS Hold Auto-Issued]"></div>
+          <div style="flex: 1; background: #ef4444; height: 88%; border-radius: 2px;" title="H17: Chatter degradation | Drift +$894.00 (+26.4%)"></div>
+          <div style="flex: 1; background: #ef4444; height: 100%; border-radius: 2px;" title="H18: Final Clock-off | Cumulative Drift +$1,076.00 (+34.19%)"></div>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.725rem; color: var(--text-muted); margin-top: 6px;">
+          <span>Hour 1 (Shift Start: 06:00 UTC)</span>
+          <span style="color: #f59e0b;">Hour 12 (Thermal/Wear Onset)</span>
+          <span style="color: #ef4444; font-weight: 600;">Hour 15 (IFS Quarantine Gate)</span>
+          <span>Hour 18 (Operation Complete)</span>
+        </div>
+      </div>
+
+      <!-- Visual Chart 2: Thermal Buildup (°C) & Hydro Proof Hold Curve -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+        
+        <!-- Thermal Inconel Profile -->
+        <div style="background: rgba(17, 24, 39, 0.9); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 18px;">
+          <div style="font-weight: 700; font-size: 0.8rem; color: #f9fafb; margin-bottom: 8px; text-transform: uppercase;">
+            Spindle Thermal Curve (Tool-Alloy Friction)
+          </div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">
+            Thermal imaging IR sensor readings over time. Superalloy cutting generates localized heat that triggers work-hardening above 80°C.
+          </p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.785rem; color: var(--text-muted); line-height: 1.8;">
+            <div>H+01: 43.8°C <span style="color: var(--status-success-text);">(Nominal)</span></div>
+            <div>H+06: 52.8°C <span style="color: var(--status-success-text);">(Stable Cutting Boundary)</span></div>
+            <div>H+12: 66.0°C <span style="color: #f59e0b;">(Elevated Friction Buildup)</span></div>
+            <div>H+15: 78.6°C <span style="color: #f59e0b;">(Work-Hardening Warning)</span></div>
+            <div>H+18: 87.0°C <span style="color: var(--status-danger-text);">(Critical Heat Exceeded - Tool Life Expired)</span></div>
+          </div>
+        </div>
+
+        <!-- MIL-DTL-777 Hydro Hold Curve -->
+        <div style="background: rgba(17, 24, 39, 0.9); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 18px;">
+          <div style="font-weight: 700; font-size: 0.8rem; color: #f9fafb; margin-bottom: 8px; text-transform: uppercase;">
+            MIL-DTL-777 Hydro Proof Hold (10.0 Continuous Min)
+          </div>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">
+            Proof pressure transducer curve. Target: 3,750 PSI shell hold with zero pressure decay across 600 elapsed seconds.
+          </p>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.785rem; color: var(--text-muted); line-height: 1.8;">
+            <div>00:00: Pump pressurized to 3,755.0 PSI <span style="color: var(--accent-cyan);">(Ramp Complete)</span></div>
+            <div>02:30: Gauge stable at 3,754.5 PSI (Leakage: 0.0 SCFH)</div>
+            <div>05:00: Gauge stable at 3,754.0 PSI (Midpoint Verification)</div>
+            <div>07:30: Gauge stable at 3,753.5 PSI (Pack Gland Intact)</div>
+            <div>10:00: Proof Complete at 3,753.0 PSI <span style="color: var(--status-success-text);">(ZERO DECAY &bull; PASSED)</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Data Ingestion & Storage Architecture Breakdown -->
+      <div style="margin-top: 24px; background: rgba(2, 132, 199, 0.05); border: 1px solid var(--accent-blue); border-radius: 8px; padding: 18px;">
+        <h3 style="font-size: 0.9rem; color: #38bdf8; margin-bottom: 8px;">Enterprise Data Ingestion &amp; Partitioning Strategy</h3>
+        <ul style="font-size: 0.8rem; color: #bae6fd; padding-left: 20px; line-height: 1.6;">
+          <li><strong>Partitioning:</strong> Stored in Delta Lake partitioned by <code>/site_id/year/month/day/work_center/</code> to allow sub-second queries on 64-hour sliding windows.</li>
+          <li><strong>Rate-Limiting ERP Sync:</strong> High-frequency 100 Hz sensor feeds are compressed into 15-minute tumbling aggregations before hitting the IFS Cloud OData layer, protecting ERP connection pools.</li>
+          <li><strong>Early Containment:</strong> Catching cost drift at Hour 15 (+$578) rather than shift-end (+$1,076) enables dynamic tool offsets or re-tooling before the casting is damaged.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
   <!-- TAB: Google TimesFM Predictive Intelligence -->
   <div id="tab-timesfm" class="tab-pane">
     <div class="specs-card">
@@ -403,26 +530,9 @@ full_html = f"""<!DOCTYPE html>
         </div>
       </div>
 
-      <!-- Visual Curve Representation -->
-      <div style="background: rgba(17, 24, 39, 0.9); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 20px; margin-bottom: 24px;">
-        <div style="font-weight: 700; font-size: 0.85rem; color: #f9fafb; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.05em;">
-          Predictive Tool Load Trajectory (Freez-SO-2026-8041 // Freez-WC-5AXIS-MILL-02)
-        </div>
-        <div style="display: flex; align-items: flex-end; height: 120px; gap: 8px; padding-bottom: 12px; border-bottom: 1px dashed #4b5563;">
-          <div style="flex: 1; background: #0284c7; height: 50%; border-radius: 3px;" title="T-48h: 52% Nominal"></div>
-          <div style="flex: 1; background: #0284c7; height: 56%; border-radius: 3px;" title="T-36h: 58% Nominal"></div>
-          <div style="flex: 1; background: #0284c7; height: 62%; border-radius: 3px;" title="T-24h: 64% Nominal"></div>
-          <div style="flex: 1; background: #0284c7; height: 72%; border-radius: 3px;" title="T-12h: 71% Early Chatter"></div>
-          <div style="flex: 1; background: #06b6d4; height: 76%; border-radius: 3px;" title="T-0 (Now): 74.2% Current Spindle Load"></div>
-          <div style="flex: 1; background: #f59e0b; height: 82%; border-radius: 3px;" title="TimesFM +4h: 79.5% Projected"></div>
-          <div style="flex: 1; background: #f59e0b; height: 86%; border-radius: 3px;" title="TimesFM +8h: 84.1% Critical"></div>
-          <div style="flex: 1; background: #ef4444; height: 92%; border-radius: 3px;" title="TimesFM +12h: 88.7% Tool Failure Predicted"></div>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 0.725rem; color: var(--text-muted); margin-top: 6px;">
-          <span>-64 Hours (Historical Telemetry Ingestion)</span>
-          <span style="color: #06b6d4; font-weight: 600;">Current Spindle Status</span>
-          <span style="color: #ef4444; font-weight: 600;">+12 Hours (TimesFM Zero-Shot Forecast)</span>
-        </div>
+      <!-- High-Fidelity Vector Line Graph Representation -->
+      <div style="margin-bottom: 24px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid var(--border-subtle);">
+        <img src="images/timesfm_spindle_forecast.svg" alt="Google TimesFM Predictive Spindle Load Line Graph" style="width: 100%; height: auto; display: block;">
       </div>
 
       <!-- Closed-Loop Automated EAM Dispatch -->

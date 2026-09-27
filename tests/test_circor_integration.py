@@ -152,3 +152,28 @@ def test_timesfm_predictive_spindle_forecast():
     assert res["estimated_prevented_scrap_cost"] == 24500.00
     assert "WorkOrderHandling.svc" in res["recommended_maintenance_action"]
 
+
+def test_temporal_telemetry_engine():
+    import importlib
+    m7 = importlib.import_module("lakehouse_pipeline.07_temporal_telemetry_engine")
+    snapshots = m7.generate_temporal_machining_profile()
+    hydro = m7.evaluate_hydro_pressure_curve()
+
+    assert len(snapshots) == 18
+    # Early hours nominal
+    assert snapshots[0].elapsed_hour == 1
+    assert snapshots[0].cumulative_cost_drift == 0.0
+    assert snapshots[0].active_hold_triggered is False
+
+    # Hour 15 breaches >15% cost tolerance
+    assert snapshots[14].elapsed_hour == 15
+    assert snapshots[14].active_hold_triggered is True
+
+    # Hydro curve verification
+    assert len(hydro) == 10
+    assert hydro[-1]["hold_seconds"] == 600
+    assert hydro[-1]["pressure_psi"] >= 3750.0
+    assert hydro[-1]["leak_rate_scfh"] == 0.0
+    assert hydro[-1]["verification_status"] == "PASS"
+
+
