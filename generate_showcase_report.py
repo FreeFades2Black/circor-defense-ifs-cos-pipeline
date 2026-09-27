@@ -775,10 +775,36 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           CIRCOR Global Manufacturing Network &amp; Facility Efficiency
         </h2>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
-          11 Operational Facilities across North America, Europe, and Asia. Click or hover any facility for live IFS Cloud OData telemetry.
+          11 Operational Facilities across North America, Europe, and Asia. Select a site to auto-pan and view live IFS Cloud OData telemetry.
         </p>
       </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
+      
+      <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+        <!-- Facility Quick-Jump Dropdown -->
+        <div style="position: relative;">
+          <select id="plant-select" onchange="focusPlant(this.value)" style="
+            background: var(--bg-card);
+            color: var(--text-bright);
+            border: 1px solid var(--border-medium);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+          ">
+            <option value="global">🌍 Global Network Overview</option>
+            <option value="leslie">📍 Leslie Controls (Tampa, FL) - Nuclear &amp; Naval</option>
+            <option value="warren">📍 Warren Pumps (Warren, MA) - Submarine Rotary</option>
+            <option value="allweiler-rad">📍 Allweiler (Radolfzell, Germany) - Marine Triple-Screw</option>
+            <option value="allweiler-bot">📍 Allweiler / Houttuin (Bottrop, Germany) - Cavity Pumps</option>
+            <option value="monroe">📍 Imo Pump (Monroe, NC) - Lubrication Systems</option>
+            <option value="corona">📍 CIRCOR Aerospace (Corona, CA) - Actuation</option>
+            <option value="uxbridge">📍 Hale Hamilton (Uxbridge, UK) - High-Pressure Gas</option>
+          </select>
+        </div>
+
         <span class="pill pill-accent">Active Sync: 11 / 11 Plants</span>
         <span class="pill pill-green">Global OEE: 86.4%</span>
       </div>
@@ -1322,8 +1348,24 @@ __CHEAT_SHEET_HTML__
     }
   ];
 
+  // Map plant IDs to markers for programmatic focusing
+  const plantMarkers = {};
+
   // Render Glowing Radar HTML Pins and Interactive Tooltips
   circorPlants.forEach(plant => {
+    // Derive an ID if not explicitly provided
+    let plantId = plant.id;
+    if (!plantId) {
+      if (plant.name.includes("Leslie")) plantId = "leslie";
+      else if (plant.name.includes("Warren")) plantId = "warren";
+      else if (plant.name.includes("Radolfzell")) plantId = "allweiler-rad";
+      else if (plant.name.includes("Bottrop")) plantId = "allweiler-bot";
+      else if (plant.name.includes("Monroe")) plantId = "monroe";
+      else if (plant.name.includes("Corona")) plantId = "corona";
+      else if (plant.name.includes("Uxbridge")) plantId = "uxbridge";
+      else plantId = plant.name.toLowerCase().replace(/[^a-z0-9]/g, "-");
+    }
+
     const pinIcon = L.divIcon({
       className: 'custom-pin-wrapper',
       html: `<div class="plant-pin" style="background-color: ${plant.accentColor}; color: ${plant.accentColor};"></div>`,
@@ -1363,7 +1405,37 @@ __CHEAT_SHEET_HTML__
     marker.on('mouseover', function () {
       this.openPopup();
     });
+
+    // Store reference to marker
+    plantMarkers[plantId] = {
+      marker: marker,
+      coords: plant.coords
+    };
   });
+
+  function focusPlant(plantId) {
+    if (plantId === 'global') {
+      map.closePopup();
+      map.flyTo([26.0, 10.0], 2, {
+        duration: 1.5,
+        easeLinearity: 0.25
+      });
+      return;
+    }
+
+    const target = plantMarkers[plantId];
+    if (target) {
+      map.flyTo(target.coords, 7, {
+        duration: 1.5,
+        easeLinearity: 0.25
+      });
+
+      // Automatically open the info popup once the camera finishes moving
+      setTimeout(() => {
+        target.marker.openPopup();
+      }, 1200);
+    }
+  }
 
   // Ensure Leaflet recalculates viewport bounds after initial render
   setTimeout(() => { map.invalidateSize(); }, 350);
