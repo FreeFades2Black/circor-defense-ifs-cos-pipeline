@@ -594,8 +594,12 @@
     <div class="brand-cluster">
       <div class="brand-mark">CIRCOR</div>
       <div class="brand-title">
-        <h1>IFS Cloud 24R2 Discrete Manufacturing & Defense Intelligence</h1>
-        <p>Operational Architecture Showcase | Leslie Controls (Tampa, FL) & Warren Pumps (Warren, MA)</p>
+        <h1>IFS Cloud 24R2 Discrete Manufacturing &amp; Defense Intelligence</h1>
+        <p>
+          Operational Architecture Showcase &bull; 
+          <strong>Leslie Controls (Tampa, FL):</strong> Super G/GPK Steam Reducing Regulators &amp; Nuclear Submarine Cryogenic Globe Valves | 
+          <strong>Warren Pumps (Warren, MA):</strong> Main Sea Water, Lube Oil &amp; Hydraulic Service Pumps for <em>Virginia</em> &amp; <em>Columbia</em>-Class Submarines
+        </p>
       </div>
     </div>
     <div class="meta-pills">
@@ -755,14 +759,14 @@
       <!-- Left: Active Orders Table -->
       <div class="main-panel">
         <div class="panel-top">
-          <h3>Active Shop Orders & Variance Analytics (Gold Layer)</h3>
+          <h3>Active Shop Orders &amp; Variance Analytics (Gold Layer)</h3>
           <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--cyan-accent);">IFS Cost Set 1 Baseline</span>
         </div>
         <table class="circor-table">
           <thead>
             <tr>
               <th>Shop Order</th>
-              <th>Part & Heat Lot</th>
+              <th>Defense Equipment Master &amp; Heat Lot</th>
               <th>Planned ($)</th>
               <th>Actual ($)</th>
               <th>Cost Drift</th>
@@ -772,10 +776,14 @@
           </thead>
           <tbody>
             <tr>
-              <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-bright);">Freez-SO-2026-8041</td>
+              <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-bright);">
+                Freez-SO-2026-8041
+                <div style="font-size: 0.68rem; color: var(--text-muted); font-weight: 400;">Site: US20-LESLIE</div>
+              </td>
               <td>
-                <div style="font-weight: 600;">6" Cryo Globe Valve (Inconel 625)</div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted);">Lot: Freez-HEAT-INC625-9942</div>
+                <div style="font-weight: 700; color: var(--text-bright);">Leslie Super G/GPK-1S Steam Regulator Body</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--cyan-accent);">Part: Freez-PART-LC-GPK1S-3IN (Inconel 625)</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted);">Heat Lot: Freez-HEAT-INC625-9942 &bull; MIL-DTL-777 Cl. 300</div>
               </td>
               <td>$3,147.00</td>
               <td>$4,223.00</td>
@@ -784,16 +792,20 @@
               <td><span class="badge badge-parked" id="status-8041">Parked (Hold)</span></td>
             </tr>
             <tr>
-              <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-bright);">Freez-SO-2026-1102</td>
-              <td>
-                <div style="font-weight: 600;">4" Submarine Ball Valve (Monel K-500)</div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted);">Lot: Freez-HEAT-MNL-1048</div>
+              <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-bright);">
+                Freez-SO-2026-1102
+                <div style="font-size: 0.68rem; color: var(--text-muted); font-weight: 400;">Site: US10-WARREN</div>
               </td>
-              <td>$1,678.00</td>
-              <td>$1,632.00</td>
+              <td>
+                <div style="font-weight: 700; color: var(--text-bright);">Warren MSW-200-S Main Sea Water Pump Casing</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--cyan-accent);">Part: Freez-PART-WRN-MSW200S-VOL (Monel K-500)</div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--text-muted);">Heat Lot: Freez-HEAT-MNL-1048 &bull; NAVSEA Submarine Cooling</div>
+              </td>
+              <td>$1,676.00</td>
+              <td>$1,630.00</td>
               <td style="color: var(--green-ok); font-weight: 700;">-2.74%</td>
               <td>100.0%</td>
-              <td><span class="badge badge-released" id="status-1102">Released</span></td>
+              <td><span class="badge badge-released">Released</span></td>
             </tr>
           </tbody>
         </table>
@@ -804,19 +816,18 @@
         <h3>Remediation & IFS Event Stream</h3>
         <div class="timeline-stream" id="audit-timeline">
           <div class="event-card event-danger">
-            <div class="event-time">14:22:04 UTC &bull; OData v4 Daemon</div>
-            <div class="event-title">ParkOrder Invoked (Freez-SO-8041)</div>
-            <div style="color: var(--text-muted);">Cost overrun &gt;15% and scrap detected. Order quarantined to block WIP propagation.</div>
+            <div class="event-time">10:04:12 UTC &bull; ShopOrderHandling.svc</div>
+            <div class="event-title">IFS Administrative Hold Executed</div>
+            <div style="color: var(--text-muted);">
+              Order <code>Freez-SO-2026-8041</code> (Leslie GPK-1S Inconel regulator) parked. Exceeded 15% Lean variance threshold on 5-axis cell.
+            </div>
           </div>
           <div class="event-card event-success">
-            <div class="event-time">13:10:00 UTC &bull; Aurena Workbench</div>
-            <div class="event-title">Operation 20 Clock-In (Freez-SO-1102)</div>
-            <div style="color: var(--text-muted);">Monel K-500 heat lot Freez-HEAT-MNL-1048 validated. Tolerance within bounds.</div>
-          </div>
-          <div class="event-card event-success">
-            <div class="event-time">11:45:12 UTC &bull; Quality Assurance</div>
-            <div class="event-title">Hydro Proof Certified (Freez-SO-1102)</div>
-            <div style="color: var(--text-muted);">ASME Sec III 6,000 PSI 15-min soak passed with 0.0 SCFH leak rate.</div>
+            <div class="event-time">09:48:30 UTC &bull; QualityAssurance.svc</div>
+            <div class="event-title">MIL-DTL-777 Hydro Proof Passed</div>
+            <div style="color: var(--text-muted);">
+              Order <code>Freez-SO-2026-1102</code> (Warren MSW-200-S pump volute) verified at 3,754 PSI with 0.0 SCFH leak rate across 10-minute hold.
+            </div>
           </div>
         </div>
       </div>
@@ -1188,7 +1199,7 @@
   </div>
 
   <footer>
-    CIRCOR International Operational Architecture Showcase &bull; Engineered on Arch Linux (Omarchy Local Node) &bull; Verified UTC: 2026-09-27 16:20:44 UTC
+    CIRCOR International Operational Architecture Showcase &bull; Engineered on Arch Linux (Omarchy Local Node) &bull; Verified UTC: 2026-09-27 17:35:37 UTC
   </footer>
 
 </div>
