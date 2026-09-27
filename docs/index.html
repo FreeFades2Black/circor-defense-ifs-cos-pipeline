@@ -1135,8 +1135,134 @@
         <li><strong>Predictive Quarantine:</strong> When TimesFM anticipates load exceeding 85% at Hour +9, it creates a preventive maintenance work order in IFS EAM (<code>WorkOrderHandling.svc</code>).</li>
         <li><strong>Scrap Avoidance:</strong> Saves an estimated $24,500 in scrapped superalloy casting and lost spindle machining hours per event.</li>
       </ul>
-      <div style="margin-top: 24px; text-align: center; background: var(--bg-card); padding: 20px; border-radius: 8px; border: 1px solid var(--border-medium);">
-        <img src="images/timesfm_spindle_forecast.svg" alt="Google TimesFM 12-Hour Spindle Load Forecast" style="max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+      <!-- Interactive TimesFM Visual Forecast Canvas -->
+      <div style="background: #0f172a; border: 1px solid #334155; border-radius: 10px; padding: 20px; margin-top: 18px;">
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; color: #f8fafc;">
+              SPINDLE CUTTING LOAD (%) &bull; Freez-WC-5AXIS-MILL-02
+            </span>
+            <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 10px;">Part: Freez-PART-LC-GPK1S-3IN (Inconel 625)</span>
+          </div>
+          <div style="display: flex; gap: 14px; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace;">
+            <span style="color: #94a3b8;"><span style="display: inline-block; width: 10px; height: 10px; background: #0284c7; border-radius: 2px; margin-right: 4px;"></span>Past 48h Actual</span>
+            <span style="color: #ef4444;"><span style="display: inline-block; width: 10px; height: 10px; background: #ef4444; border-radius: 2px; margin-right: 4px;"></span>Unmitigated Failure Path</span>
+            <span style="color: #10b981;"><span style="display: inline-block; width: 10px; height: 10px; background: #10b981; border-radius: 2px; margin-right: 4px;"></span>TimesFM Preventive Swap</span>
+          </div>
+        </div>
+
+        <!-- Scalable Responsive SVG Chart -->
+        <div style="position: relative; width: 100%; height: 320px;">
+          <svg viewBox="0 0 1000 320" style="width: 100%; height: 100%; overflow: visible;" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="tfmRedGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="0.05"/>
+              </linearGradient>
+              <linearGradient id="tfmAmberGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.02"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Red Danger Zone (>85% Load) -->
+            <rect x="60" y="20" width="880" height="48" fill="url(#tfmRedGrad)"/>
+            <line x1="60" y1="68" x2="940" y2="68" stroke="#ef4444" stroke-dasharray="4 4" stroke-width="1.5" stroke-opacity="0.8"/>
+            <text x="70" y="48" fill="#f87171" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="700">
+              DANGER ZONE &gt;85%: CATASTROPHIC TOOL BREAKAGE &amp; PART SCRAP ($24,500 LOSS)
+            </text>
+
+            <!-- Amber Warning Zone (70% - 85% Load) -->
+            <rect x="60" y="68" width="880" height="48" fill="url(#tfmAmberGrad)"/>
+            <line x1="60" y1="116" x2="940" y2="116" stroke="#f59e0b" stroke-dasharray="4 4" stroke-width="1" stroke-opacity="0.5"/>
+            <text x="70" y="96" fill="#fbbf24" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="600">
+              WARNING ZONE (70% - 85%): Tool Chatter &amp; Rapid Micro-Fracturing
+            </text>
+
+            <!-- Safe Zone Label -->
+            <text x="70" y="160" fill="#34d399" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="600">
+              SAFE OPERATING ZONE (&lt;70%): Clean Spindle Profiling
+            </text>
+
+            <!-- Axis Framework -->
+            <line x1="60" y1="20" x2="60" y2="270" stroke="#334155" stroke-width="1"/>
+            <line x1="60" y1="270" x2="940" y2="270" stroke="#334155" stroke-width="1"/>
+
+            <!-- Y-Axis Labels -->
+            <text x="25" y="24" fill="#94a3b8" font-size="11" font-family="'JetBrains Mono', monospace">100%</text>
+            <text x="25" y="72" fill="#ef4444" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="700">85%</text>
+            <text x="25" y="120" fill="#f59e0b" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="700">70%</text>
+            <text x="25" y="195" fill="#94a3b8" font-size="11" font-family="'JetBrains Mono', monospace">45%</text>
+            <text x="35" y="274" fill="#94a3b8" font-size="11" font-family="'JetBrains Mono', monospace">0%</text>
+
+            <!-- Vertical "NOW" Boundary at X=550 -->
+            <line x1="550" y1="20" x2="550" y2="270" stroke="#06b6d4" stroke-width="2"/>
+            <polygon points="545,15 555,15 550,22" fill="#06b6d4"/>
+            <text x="495" y="12" fill="#06b6d4" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="800">
+              NOW (CURRENT STATE)
+            </text>
+
+            <!-- X-Axis Labels -->
+            <text x="70" y="292" fill="#64748b" font-size="10" font-family="'JetBrains Mono', monospace">-48h Intake</text>
+            <text x="220" y="292" fill="#64748b" font-size="10" font-family="'JetBrains Mono', monospace">-36h</text>
+            <text x="360" y="292" fill="#64748b" font-size="10" font-family="'JetBrains Mono', monospace">-24h</text>
+            <text x="470" y="292" fill="#64748b" font-size="10" font-family="'JetBrains Mono', monospace">-12h</text>
+            <text x="535" y="292" fill="#06b6d4" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="700">Hour 0</text>
+            <text x="660" y="292" fill="#94a3b8" font-size="10" font-family="'JetBrains Mono', monospace">+4h</text>
+            <text x="770" y="292" fill="#94a3b8" font-size="10" font-family="'JetBrains Mono', monospace">+8h (Breach)</text>
+            <text x="890" y="292" fill="#94a3b8" font-size="10" font-family="'JetBrains Mono', monospace">+12h Shift End</text>
+
+            <!-- Historical Path (Left of NOW) -->
+            <path d="M 60 190 Q 150 185, 220 178 T 360 160 T 470 135 T 550 105" 
+                  fill="none" stroke="#0284c7" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="220" cy="178" r="3.5" fill="#0284c7"/>
+            <circle cx="360" cy="160" r="3.5" fill="#0284c7"/>
+            <circle cx="470" cy="135" r="3.5" fill="#06b6d4"/>
+            <circle cx="550" cy="105" r="6" fill="#06b6d4" stroke="#ffffff" stroke-width="2"/>
+            <text x="560" y="100" fill="#ffffff" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="700">
+              74.2% Load (Chatter Detected)
+            </text>
+
+            <!-- Path 1: Unmitigated Failure (Red Dashed) -->
+            <path d="M 550 105 Q 660 85, 760 62 T 850 35" 
+                  fill="none" stroke="#ef4444" stroke-width="3" stroke-dasharray="6 6" stroke-linecap="round"/>
+            <circle cx="760" cy="62" r="5" fill="#ef4444"/>
+            <circle cx="850" cy="35" r="8" fill="#ef4444" opacity="0.6"/>
+            <circle cx="850" cy="35" r="4" fill="#ffffff"/>
+            <text x="765" y="55" fill="#f87171" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="700">
+              Hour +8.2: Breach 85%
+            </text>
+            <text x="840" y="24" fill="#f87171" font-size="11" font-family="'JetBrains Mono', monospace" font-weight="800">
+              TOOL FRACTURE (Hour +9)
+            </text>
+
+            <!-- Path 2: TimesFM Preventive Swap (Green Solid) -->
+            <path d="M 550 105 L 680 115 L 700 200 L 920 195" 
+                  fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="680" cy="115" r="5" fill="#10b981"/>
+            <rect x="670" y="80" width="130" height="26" rx="4" fill="#10b981" fill-opacity="0.2" stroke="#10b981"/>
+            <text x="676" y="97" fill="#34d399" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="700">
+              12-Min Tool Swap
+            </text>
+            <circle cx="700" cy="200" r="5" fill="#10b981"/>
+            <text x="720" y="220" fill="#34d399" font-size="10" font-family="'JetBrains Mono', monospace" font-weight="700">
+              Reset to 42% Load (Safe)
+            </text>
+          </svg>
+        </div>
+
+        <!-- Legend & Bottom Details -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1e293b; padding-top: 12px; margin-top: 6px; font-size: 0.775rem;">
+          <div style="color: #94a3b8;">
+            <strong style="color: #06b6d4;">Past (Left):</strong> 100 Hz Ingested Telemetry &bull; 
+            <strong style="color: #f59e0b;">Future (Right):</strong> Google TimesFM Zero-Shot Inference
+          </div>
+          <div style="font-family: 'JetBrains Mono', monospace; color: #10b981; font-weight: 600;">
+            Remediation: Tool Swap Staged via IFS WorkOrderHandling.svc
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1345,7 +1471,7 @@
   </div>
 
   <footer>
-    CIRCOR International Operational Architecture Showcase &bull; Engineered on Arch Linux (Omarchy Local Node) &bull; Verified UTC: 2026-09-27 17:39:45 UTC
+    CIRCOR International Operational Architecture Showcase &bull; Engineered on Arch Linux (Omarchy Local Node) &bull; Verified UTC: 2026-09-27 17:46:04 UTC
   </footer>
 
 </div>
