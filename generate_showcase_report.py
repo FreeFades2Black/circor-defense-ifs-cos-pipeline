@@ -820,6 +820,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <!-- Tabs Navigation -->
   <nav class="tab-bar">
     <button class="tab-link active" onclick="activateTab('console')">Operations Console</button>
+    <button class="tab-link" onclick="activateTab('logistics')">Pricing &amp; Shipyard Logistics</button>
     <button class="tab-link" onclick="activateTab('temporal')">Thermal & Cost Over Time</button>
     <button class="tab-link" onclick="activateTab('timesfm')">TimesFM Predictive AI</button>
     <button class="tab-link" onclick="activateTab('compliance')">Defense & Insurance Matrix</button>
@@ -907,6 +908,151 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
 
     </div>
+  </div>
+
+  <!-- TAB: Pricing & Shipyard Logistics -->
+  <div id="tab-logistics" class="tab-body">
+    
+    <!-- Top KPI Strip for Procurement & Lead Times -->
+    <div class="kpi-strip" style="margin-bottom: 20px;">
+      <div class="kpi-box">
+        <div class="label">Gross Order Backlog</div>
+        <div class="value" style="color: var(--cyan-accent);">$1.03M</div>
+        <div class="sub">12 Active Naval Hull Contracts</div>
+      </div>
+      <div class="kpi-box">
+        <div class="label">Average ETO Turnaround</div>
+        <div class="value">22.4 Wks</div>
+        <div class="sub">Order release to shipyard receiving</div>
+      </div>
+      <div class="kpi-box">
+        <div class="label">Secure Freight Logistics</div>
+        <div class="value" style="color: var(--green-ok); font-size: 1.35rem;">MIL-STD-2073</div>
+        <div class="sub">Shock-isolated dedicated transport</div>
+      </div>
+      <div class="kpi-box">
+        <div class="label">On-Time Hull Delivery</div>
+        <div class="value" style="color: var(--green-ok);">97.8%</div>
+        <div class="sub">Pegged to Electric Boat &amp; NNS milestones</div>
+      </div>
+    </div>
+
+    <!-- Active Deliverables: Order-to-Shipment-to-Hull Table -->
+    <div class="main-panel" style="margin-bottom: 24px;">
+      <div class="panel-top">
+        <h3>End-to-End Contract Pricing, Turnaround &amp; Transit Status</h3>
+        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--cyan-accent);">
+          IFS Cloud CustomerOrderHandling.svc &bull; EDI 856 ASN Pegged
+        </span>
+      </div>
+      <table class="circor-table">
+        <thead>
+          <tr>
+            <th>Hull Contract &amp; Customer</th>
+            <th>Equipment Master</th>
+            <th>Unit Contract Price</th>
+            <th>Freight &amp; Handling</th>
+            <th>Lead Time Breakdown</th>
+            <th>Shipment &amp; Transit</th>
+            <th>Destination Dock</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div style="font-weight: 700; color: var(--text-bright);">SSN-804 (Barb)</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Customer: General Dynamics Electric Boat</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--cyan-accent);">PO: GDEB-2026-NAV-4410</div>
+            </td>
+            <td>
+              <div style="font-weight: 700; color: var(--text-bright);">Leslie Super G/GPK-1S Regulator</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted);">Inconel 625 &bull; Cl. 300 Steam</div>
+            </td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-bright);">
+              $18,450.00
+              <div style="font-size: 0.68rem; color: var(--text-muted); font-weight: 400;">+$4.2k Alloy Index</div>
+            </td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">
+              $620.00
+              <div style="font-size: 0.68rem; color: var(--green-ok);">Air-Ride Cushion</div>
+            </td>
+            <td>
+              <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-bright);">18 Weeks (126 Days)</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted);">Forging: 8w | CNC: 6w | Test: 4w</div>
+            </td>
+            <td>
+              <span class="badge badge-parked">Staged in Hold</span>
+              <div style="font-size: 0.68rem; color: #f87171; margin-top: 2px;">Delivery: -4 Days ETA</div>
+            </td>
+            <td>
+              <div style="font-weight: 600; color: var(--text-bright);">Groton, CT</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted);">EB Bldg 260 Receiving</div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div style="font-weight: 700; color: var(--text-bright);">SSBN-826 (Columbia)</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Customer: Newport News Shipbuilding</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--cyan-accent);">PO: NNS-2026-SUB-8819</div>
+            </td>
+            <td>
+              <div style="font-weight: 700; color: var(--text-bright);">Warren MSW-200-S Sea Water Pump</div>
+              <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted);">Monel K-500 &bull; Naval Cooling</div>
+            </td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-bright);">
+              $84,600.00
+              <div style="font-size: 0.68rem; color: var(--text-muted); font-weight: 400;">Firm-Fixed Price (FFP)</div>
+            </td>
+            <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;">
+              $2,450.00
+              <div style="font-size: 0.68rem; color: var(--green-ok);">Heavy Rig Flatbed</div>
+            </td>
+            <td>
+              <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-bright);">32 Weeks (224 Days)</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted);">Casting: 14w | CNC: 12w | Proof: 6w</div>
+            </td>
+            <td>
+              <span class="badge badge-released">In Transit (72h)</span>
+              <div style="font-size: 0.68rem; color: var(--green-ok); margin-top: 2px;">Carrier: R&amp;R Trucking (Mil)</div>
+            </td>
+            <td>
+              <div style="font-weight: 600; color: var(--text-bright);">Newport News, VA</div>
+              <div style="font-size: 0.68rem; color: var(--text-muted);">Pier 3 Outfitting Bay</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Visual Timeline: Order Placement to Shipyard Hands -->
+    <div class="prose-block">
+      <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-bright); margin-bottom: 12px;">
+        Submarine Hull Procurement Timeline (Warren MSW-200-S Example)
+      </h3>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px;">
+        <div style="background: var(--bg-card); padding: 12px; border-radius: 6px; border: 1px solid var(--border-medium);">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--cyan-accent);">MONTH 01 - 03</div>
+          <div style="font-size: 0.825rem; font-weight: 700; color: var(--text-bright); margin: 4px 0;">Foundry &amp; CMTR</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Pouring Monel K-500 volute casting, spectrometer chemical assay verification.</div>
+        </div>
+        <div style="background: var(--bg-card); padding: 12px; border-radius: 6px; border: 1px solid var(--border-medium);">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--cyan-accent);">MONTH 04 - 06</div>
+          <div style="font-size: 0.825rem; font-weight: 700; color: var(--text-bright); margin: 4px 0;">5-Axis CNC Machining</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Precision impeller profiling at Warren, MA cell; NAVSEA weld cladding hold points.</div>
+        </div>
+        <div style="background: var(--bg-card); padding: 12px; border-radius: 6px; border: 1px solid var(--border-medium);">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--cyan-accent);">MONTH 07 - 08</div>
+          <div style="font-size: 0.825rem; font-weight: 700; color: var(--text-bright); margin: 4px 0;">Hydro Proof &amp; QA</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">6,000 PSI hydro shell test, helium mass spec seat leak test, DCMA stamp.</div>
+        </div>
+        <div style="background: var(--bg-card); padding: 12px; border-radius: 6px; border: 1px solid var(--green-ok);">
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--green-ok);">FINAL 72 HOURS</div>
+          <div style="font-size: 0.825rem; font-weight: 700; color: var(--green-ok); margin: 4px 0;">Mil-Transit &amp; Handover</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Dedicated air-ride transport, DD Form 250 sign-off at Newport News drydock gate.</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- TAB 2: Thermal & Cost Over Time -->
