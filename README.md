@@ -68,6 +68,7 @@ To distinguish real-world enterprise standards from the custom reference archite
 | **8. Temporal Operations Engine** | `lakehouse_pipeline/07_temporal_telemetry_engine.py` | Ingests time-series telemetry; models thermal tool wear, hour-by-hour cumulative cost drift, and MIL-DTL-777 pressure curves. |
 | **9. Solution Architecture Blueprint**| `docs/cheat_sheets/ifs_solution_architect_framework.md` | Comprehensive 7-domain Solution Architect framework cheat sheet (Aurena, OData, Kubernetes, Defense Compliance). |
 | **10. Defense Compliance Matrix** | `docs/DEFENSE_COMPLIANCE_RISK_MATRIX.md` | Compliance enforcement, COPQ financial loss models ($185K–$5M+), physical sensor checkpoints, and containment protocol. |
+| **11. Global Manufacturing Network** | `docs/index.html` (Leaflet.js Map) | Interactive CartoDB dark vector map spanning 11 CIRCOR plants across North America, Europe, and Asia with real-time OEE, FPY, and IFS drift telemetry. |
 
 ---
 
