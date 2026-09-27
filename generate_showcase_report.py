@@ -353,6 +353,40 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       background: #090d16;
     }
 
+    /* Converts official OpenStreetMap tiles into a midnight dark theme without API keys */
+    .dark-tiles .leaflet-tile {
+      filter: brightness(0.65) invert(1) contrast(3.2) hue-rotate(200deg) saturate(0.3) brightness(0.75);
+    }
+
+    /* Ensure tooltips and markers remain unaffected by tile inversion */
+    .leaflet-marker-pane, .leaflet-popup-pane, .leaflet-tooltip-pane {
+      filter: none !important;
+    }
+
+    /* Pulsating Radar Map Pins */
+    .plant-pin {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      position: relative;
+      box-shadow: 0 0 10px currentColor;
+    }
+    .plant-pin::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      right: -4px;
+      bottom: -4px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
     /* Custom Leaflet Dark Tooltip and Popup */
     .leaflet-popup-content-wrapper {
       background: #0f172a !important;
@@ -1125,20 +1159,20 @@ __CHEAT_SHEET_HTML__
     location.reload();
   }
 
-  // Initialize the Leaflet Map centered on global perspective
+  // Initialize the Leaflet Map
   const map = L.map('circor-map', {
-    center: [28.0, -10.0],
-    zoom: 2.2,
+    center: [26.0, 10.0],
+    zoom: 2,
     minZoom: 2,
-    maxZoom: 10,
+    maxZoom: 9,
     scrollWheelZoom: true
   });
 
-  // Free Dark Tile Layer from CartoDB (clean and professional)
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
+  // Official OpenStreetMap tile layer (100% free, no API key, no watermark)
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    className: 'dark-tiles',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
   // Real CIRCOR International Manufacturing Locations & Operational Efficiency Data
@@ -1288,21 +1322,21 @@ __CHEAT_SHEET_HTML__
     }
   ];
 
-  // Render Glowing Map Markers and Interactive Tooltips
+  // Render Glowing Radar HTML Pins and Interactive Tooltips
   circorPlants.forEach(plant => {
-    const marker = L.circleMarker(plant.coords, {
-      radius: 8,
-      fillColor: plant.accentColor,
-      color: "#ffffff",
-      weight: 1.5,
-      opacity: 0.9,
-      fillOpacity: 0.85
-    }).addTo(map);
+    const pinIcon = L.divIcon({
+      className: 'custom-pin-wrapper',
+      html: `<div class="plant-pin" style="background-color: ${plant.accentColor}; color: ${plant.accentColor};"></div>`,
+      iconSize: [14, 14],
+      iconAnchor: [7, 7]
+    });
+
+    const marker = L.marker(plant.coords, { icon: pinIcon }).addTo(map);
 
     const popupHtml = `
       <div class="popup-plant-title">${plant.name}</div>
       <div class="popup-plant-sub">${plant.location} &bull; <strong>${plant.brand}</strong></div>
-      <div style="font-size: 0.72rem; color: #cbd5e1; margin-bottom: 6px;">
+      <div style="font-size: 0.74rem; color: #cbd5e1; margin-bottom: 8px;">
         <em>${plant.focus}</em>
       </div>
       <div class="popup-metric-grid">
@@ -1325,10 +1359,8 @@ __CHEAT_SHEET_HTML__
       </div>
     `;
 
-    marker.bindPopup(popupHtml, { maxWidth: 300 });
-
-    // Open popup on hover and focus map slightly
-    marker.on('mouseover', function (e) {
+    marker.bindPopup(popupHtml, { maxWidth: 310 });
+    marker.on('mouseover', function () {
       this.openPopup();
     });
   });
